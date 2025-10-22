@@ -151,3 +151,73 @@ You can cite the `nf-core` publication as follows:
 > Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
 >
 > _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
+
+# BU SCC Instructions
+
+Ticket: [INC20753962](https://bu.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsysparm_tiny%3Daeb503da979661949a3a7be0f053af0c%26sys_id%3D0df7e09b836c7e1076b75ddfeeaad34e%26sysparm_record_row%3D4)
+
+> I am beginning an RNAseq project and I would ultimately like to run the
+analysis on the SCC using the nextflow RNAseq pipeline described here:
+https://nf-co.re/rnaseq/3.21.0/.
+
+I looked into the Nextflow pipeline and was able to successfully run it using the provided test data. I’ll assume your working directory is something like:
+/projectnb/davey-lab/enafzig
+
+Here are the commands that I ran:
+
+```bash
+# Navigate to your working directory
+cd /projectnb/davey-lab/enafzig
+
+# Clone the GitHub repo
+git clone https://github.com/nf-core/rnaseq.git
+
+# Load the Nextflow module
+module load nextflow/25.04.7
+
+# Make sure to test your setup with -profile test before running the workflow on actual data.
+nextflow run main.nf -profile test,singularity --outdir rnaseq_out_test
+
+# Expected output:
+# -[nf-core/rnaseq] Pipeline completed successfully -
+# Completed at: 17-Oct-2025 15:40:34
+# Duration : 5m 4s
+# CPU hours : 0.9
+# Succeeded : 209
+```
+
+The next step will be to configure the pipeline to submit each task as a separate job instead of running everything locally. This involves editing the nextflow.config file.
+
+```bash
+# Navigate to your working directory
+cd /projectnb/davey-lab/enafzig
+
+# Open the nextflow.config file and add the following at the top:
+```
+
+```groovy
+// Specify process-level configuration
+process {
+  executor = 'sge'
+  penv = 'omp'
+  // aramp10 edit: Add your SCC project here
+  clusterOptions = '-P davey-lab'
+  beforeScript = 'source $HOME/.bashrc'
+}
+```
+
+```bash
+# Save these changes to nextflow.config
+
+# Load the Nextflow module
+module load nextflow/25.04.7
+# Run the pipeline by submitting each task as a job
+nextflow run main.nf -profile test,singularity --outdir rnaseq_out_test
+```
+
+Note:
+
+* Submitting each task as a job introduces queue time for each task, which can significantly slow down the pipeline.
+  * Time to run the pipeline with the test data: ~30 minutes.
+* Running locally avoids this queue time, but may be limited by available resources on the local machine.
+  * Time to run the pipeline with the test data: ~6 minutes.
