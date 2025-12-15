@@ -161,7 +161,7 @@ analysis on the SCC using the nextflow RNAseq pipeline described here:
 https://nf-co.re/rnaseq/3.21.0/.
 
 I looked into the Nextflow pipeline and was able to successfully run it using the provided test data. I’ll assume your working directory is something like:
-/projectnb/davey-lab/enafzig
+`/projectnb/davey-lab/enafzig`
 
 Here are the commands that I ran:
 
