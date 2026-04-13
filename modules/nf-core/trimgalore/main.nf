@@ -3,19 +3,17 @@ process TRIMGALORE {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_2' :
-        'biocontainers/trim-galore:0.6.10--hdfd78af_2'}"
+    container "ghcr.io/felixkrueger/trimgalore:dev"
 
     input:
     tuple val(meta), path(reads)
 
     output:
     tuple val(meta), path("*{3prime,5prime,trimmed,val}{,_1,_2}.fq.gz"), emit: reads
-    tuple val(meta), path("*report.txt")                               , emit: log     , optional: true
-    tuple val(meta), path("*unpaired{,_1,_2}.fq.gz")                   , emit: unpaired, optional: true
-    tuple val(meta), path("*.html")                                    , emit: html    , optional: true
-    tuple val(meta), path("*.zip")                                     , emit: zip     , optional: true
+    tuple val(meta), path("*report.txt"), emit: log, optional: true
+    tuple val(meta), path("*unpaired{,_1,_2}.fq.gz"), emit: unpaired, optional: true
+    tuple val(meta), path("*.html"), emit: html, optional: true
+    tuple val(meta), path("*.zip"), emit: zip, optional: true
     tuple val("${task.process}"), val("trimgalore"), eval('trim_galore --version | grep -Eo "[0-9]+(\\.[0-9]+)+"'), topic: versions, emit: versions_trimgalore
 
     when:
