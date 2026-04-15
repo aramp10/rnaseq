@@ -30,7 +30,7 @@
                     [
                         "TRIMGALORE",
                         "trimgalore",
-                        "0.6.10"
+                        "2.0.0"
                     ]
                 ]
             }
@@ -53,7 +53,7 @@
                 "==========================",
                 "Input filename: test_1.fastq.gz",
                 "Trimming mode: paired-end",
-                "Trim Galore version: 0.6.10",
+                "Trim Galore version: 2.0.0",
                 "Cutadapt version: 5.2",
                 "Number of cores used for trimming: 1",
                 "Quality Phred score cutoff: 20",
@@ -116,7 +116,7 @@
                 "==========================",
                 "Input filename: test_2.fastq.gz",
                 "Trimming mode: paired-end",
-                "Trim Galore version: 0.6.10",
+                "Trim Galore version: 2.0.0",
                 "Cutadapt version: 5.2",
                 "Number of cores used for trimming: 1",
                 "Quality Phred score cutoff: 20",
@@ -182,7 +182,7 @@
                     [
                         "TRIMGALORE",
                         "trimgalore",
-                        "0.6.10"
+                        "2.0.0"
                     ]
                 ]
             }
@@ -218,7 +218,7 @@
                     [
                         "TRIMGALORE",
                         "trimgalore",
-                        "0.6.10"
+                        "2.0.0"
                     ]
                 ]
             }
@@ -239,7 +239,7 @@
                 "==========================",
                 "Input filename: test_1.fastq.gz",
                 "Trimming mode: paired-end",
-                "Trim Galore version: 0.6.10",
+                "Trim Galore version: 2.0.0",
                 "Cutadapt version: 5.2",
                 "Number of cores used for trimming: 1",
                 "Quality Phred score cutoff: 20",
@@ -301,7 +301,7 @@
                 "==========================",
                 "Input filename: test_2.fastq.gz",
                 "Trimming mode: paired-end",
-                "Trim Galore version: 0.6.10",
+                "Trim Galore version: 2.0.0",
                 "Cutadapt version: 5.2",
                 "Number of cores used for trimming: 1",
                 "Quality Phred score cutoff: 20",
@@ -364,7 +364,7 @@
                     [
                         "TRIMGALORE",
                         "trimgalore",
-                        "0.6.10"
+                        "2.0.0"
                     ]
                 ]
             }
@@ -392,7 +392,7 @@
                 "==========================",
                 "Input filename: test.fastq.gz",
                 "Trimming mode: single-end",
-                "Trim Galore version: 0.6.10",
+                "Trim Galore version: 2.0.0",
                 "Cutadapt version: 5.2",
                 "Number of cores used for trimming: 1",
                 "Quality Phred score cutoff: 20",
@@ -454,7 +454,7 @@
                     [
                         "TRIMGALORE",
                         "trimgalore",
-                        "0.6.10"
+                        "2.0.0"
                     ]
                 ]
             }
