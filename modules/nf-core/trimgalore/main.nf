@@ -3,7 +3,7 @@ process TRIMGALORE {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "ghcr.io/felixkrueger/trimgalore:dev"
+    container "ghcr.io/felixkrueger/trimgalore@sha256:3e5dd519ea992ce88eb6f01e8d051a33f356e9ecd2d45e79a9c9bd0ac05c5b77"
 
     input:
     tuple val(meta), path(reads)
