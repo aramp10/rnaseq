@@ -310,6 +310,14 @@ def validateInputParameters() {
         error("Please provide --ribo_database_manifest to remove ribosomal RNA with SortMeRNA or Bowtie2.")
     }
 
+    if (params.use_gpu_ribodetector && params.ribo_removal_tool != 'ribodetector') {
+        error("--use_gpu_ribodetector requires --ribo_removal_tool 'ribodetector'.")
+    }
+
+    if (params.use_gpu_ribodetector && (params.arm ?: false)) {
+        error("--use_gpu_ribodetector is not supported on ARM architecture. GPU acceleration requires an x86_64 host with NVIDIA GPUs.")
+    }
+
     if (params.use_parabricks_star && (params.arm ?: false)) {
         error("Parabricks (--use_parabricks_star) is not supported on ARM architecture. Parabricks requires an x86_64 host with NVIDIA GPUs.")
     }
@@ -469,6 +477,60 @@ def toolBibliographyText() {
         ].join(' ').trim()
 
     return reference_text
+}
+
+//
+// MultiQC `--replace-names` file: map each FASTQ simpleName to '<id>_1' /
+// '<id>_2' (or '<id>' for SE), skipping cases where simpleName already
+// equals the sample ID (see #1341 / #1659).
+//
+def multiqcNameReplacements(ch_fastq) {
+    return ch_fastq
+        .map { meta, reads ->
+            def paired   = reads[0][1] as boolean
+            def suffixes = paired ? ['_1', '_2'] : ['']
+            def mappings = []
+
+            def fastq1_simplename = file(reads[0][0]).simpleName
+            if (fastq1_simplename != meta.id) {
+                mappings << [fastq1_simplename, "${meta.id}${suffixes[0]}"]
+                if (paired) {
+                    mappings << [file(reads[0][1]).simpleName, "${meta.id}${suffixes[1]}"]
+                }
+            }
+
+            return mappings.collect { mapping -> mapping.join('\t') }
+        }
+        .flatten()
+        .collectFile(name: 'name_replacement.txt', newLine: true)
+        .ifEmpty([])
+}
+
+// Escape Python-regex metacharacters and YAML single-quote a sample ID for
+// use in a multiqcSampleMergeYaml lookbehind pattern.
+def multiqcSampleMergeYamlPattern(id, read) {
+    def esc = id.replaceAll(/[\\^$.|?*+()\[\]{}\/]/) { m -> "\\${m[0]}" }
+                .replace("'", "''")
+    return "    - type: regex\n      pattern: '(?<=^${esc})_${read}\$'"
+}
+
+//
+// MultiQC table_sample_merge YAML scoped to PE sample IDs via fixed-length
+// lookbehind, so sample IDs ending in `_1` / `_2` aren't wrongly collapsed.
+//
+def multiqcSampleMergeYaml(samplesheet_path, schema_path) {
+    // row order comes from assets/schema_input.json: [0]=meta, [1]=fastq_1,
+    // [2]=fastq_2 (truthy => paired-end).
+    def pe_sample_ids = samplesheetToList(samplesheet_path, schema_path)
+        .findAll { row -> row[2] as boolean }
+        .collect { row -> row[0].id as String }
+        .unique()
+        .sort()
+    if (!pe_sample_ids) return 'table_sample_merge: {}\n'
+
+    def r1 = pe_sample_ids.collect { id -> multiqcSampleMergeYamlPattern(id, 1) }.join('\n')
+    def r2 = pe_sample_ids.collect { id -> multiqcSampleMergeYamlPattern(id, 2) }.join('\n')
+    return "table_sample_merge:\n  \"Read 1\":\n${r1}\n  \"Read 2\":\n${r2}\n"
 }
 
 def methodsDescriptionText(mqc_methods_yaml) {
@@ -680,6 +742,32 @@ def checkMaxContigSize(fai_file) {
             error(error_string)
         }
     }
+}
+
+//
+// Build list of QC tools for BAM_QC_RNASEQ subworkflow from pipeline params
+//
+def defineQcTools(params) {
+    def tools = []
+
+    if (!params.skip_qc) {
+        if (!params.skip_preseq)    { tools << 'preseq' }
+        if (!params.skip_biotype_qc){ tools << 'biotype_qc' }
+        if (!params.skip_qualimap)  { tools << 'qualimap' }
+        if (!params.skip_dupradar)  { tools << 'dupradar' }
+
+        if (!params.skip_rseqc) {
+            def rseqc_modules = params.rseqc_modules
+                ? params.rseqc_modules.split(',').collect { it.trim().toLowerCase() }
+                : []
+            if (params.bam_csi_index) {
+                rseqc_modules.removeAll(['read_distribution', 'inner_distance', 'tin'])
+            }
+            rseqc_modules.each { tools << "rseqc_${it}" }
+        }
+    }
+
+    return tools
 }
 
 //

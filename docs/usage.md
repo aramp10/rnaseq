@@ -222,6 +222,22 @@ nextflow run nf-core/rnaseq --remove_ribo_rna --ribo_removal_tool ribodetector .
 
 RiboDetector automatically determines read length from your data and uses its pre-trained neural network model to classify reads.
 
+#### GPU acceleration for RiboDetector
+
+RiboDetector supports GPU acceleration via `--use_gpu_ribodetector`. When enabled, the pipeline uses a CUDA-enabled container with PyTorch GPU support and switches to the GPU binary automatically.
+
+```bash
+nextflow run nf-core/rnaseq --remove_ribo_rna --ribo_removal_tool ribodetector --use_gpu_ribodetector ...
+```
+
+Requirements:
+
+- One or more NVIDIA GPUs (with appropriate drivers installed)
+- A container runtime (Docker, Singularity, or Apptainer); Conda is also supported
+- x86_64 architecture (ARM GPU is not currently supported)
+
+Container GPU flags (`--gpus all` for Docker, `--nv` for Singularity/Apptainer) are automatically applied and can be overridden via `--gpu_container_options`.
+
 ## Alignment options
 
 By default, the pipeline uses [STAR](https://github.com/alexdobin/STAR) (i.e. `--aligner star_salmon`) to map the raw FastQ reads to the reference genome, project the alignments onto the transcriptome and to perform the downstream BAM-level quantification with [Salmon](https://salmon.readthedocs.io/en/latest/salmon.html). STAR is fast but requires a lot of memory to run, typically around 38GB for the Human GRCh37 reference genome. Both `--aligner star_salmon` and `--aligner star_rsem` use STAR for alignment, so you should use the [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml) aligner (i.e. `--aligner hisat2`) if you have memory limitations.
@@ -586,16 +602,17 @@ nextflow run nf-core/rnaseq \
 
 ##### Input requirements
 
-| Input        | Parameter          | Requirements                                                                                                       |
-| ------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| Samplesheet  | `--input`          | Standard CSV format (see [Samplesheet input](#samplesheet-input))                                                  |
-| Genome FASTA | `--fasta`          | Genomic sequence file (`.fasta`, `.fa`, `.fna`, optionally gzipped)                                                |
-| Annotation   | `--gff` or `--gtf` | Must contain **CDS features** with `gene_id` attributes. GFF3 format (`.gff3`, `.gff`) is typical for prokaryotes. |
+| Input        | Parameter          | Requirements                                                                                                                                        |
+| ------------ | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Samplesheet  | `--input`          | Standard CSV format (see [Samplesheet input](#samplesheet-input))                                                                                   |
+| Genome FASTA | `--fasta`          | Genomic sequence file (`.fasta`, `.fa`, `.fna`, optionally gzipped)                                                                                 |
+| Annotation   | `--gff` or `--gtf` | Transcript-like features (CDS, tRNA, rRNA, tmRNA, ncRNA, etc.) with `gene_id` attributes. GFF3 format (`.gff3`, `.gff`) is typical for prokaryotes. |
 
 **Key points:**
 
 - **Use GFF3 format**: Prokaryotic annotations are typically distributed as GFF3 (not GTF). Provide GFF3 files via `--gff` and GTF files via `--gtf`.
-- **CDS features required**: The annotation must contain CDS (coding sequence) features. The pipeline extracts transcripts from these.
+- **Transcripts are extracted from all transcript-like features**: GFFREAD will extract transcript sequences from CDS, tRNA, rRNA, tmRNA, ncRNA and other feature types present in the annotation, so non-coding RNAs are quantified alongside mRNAs.
+- **CDS used for featureCounts QC**: `featurecounts_feature_type` is set to `CDS`, so biotype/counting QC metrics are based on coding sequences. Your annotation should contain CDS features for these QC steps to be meaningful.
 - **Matching contig names**: Chromosome/contig names in your FASTA must exactly match those in your GFF/GTF (e.g., if your FASTA has `>NC_003197.2`, your GFF must use `NC_003197.2` in column 1).
 - **No transcript FASTA needed**: The pipeline generates the transcript FASTA automatically using GFFREAD.
 

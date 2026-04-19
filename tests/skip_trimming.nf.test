@@ -4,12 +4,14 @@ nextflow_pipeline {
     script "../main.nf"
     tag "pipeline"
 
-    test("Params: --skip_trimming") {
+    test("Params: --skip_trimming --stringtie_ignore_gtf") {
 
         when {
             params {
                 outdir = "$outputDir"
                 skip_trimming = true
+                // Only test exercising the BAM_STRINGTIE_MERGE path.
+                stringtie_ignore_gtf = true
             }
         }
 
@@ -35,7 +37,7 @@ nextflow_pipeline {
 
         cleanup {
             if (System.getenv("NFT_PROFILE")?.contains("docker")) {
-                "docker system prune -f".execute()
+                "docker system prune -a -f --volumes".execute()
             }
             new File("${launchDir}").deleteDir()
         }
