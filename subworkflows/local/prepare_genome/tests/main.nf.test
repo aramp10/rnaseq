@@ -53,6 +53,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -74,8 +75,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -136,6 +136,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -157,8 +158,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -219,6 +219,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -240,8 +241,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -302,6 +302,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -323,8 +324,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -385,6 +385,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -406,8 +407,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -468,6 +468,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -489,8 +490,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -551,6 +551,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -572,8 +573,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -634,6 +634,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -655,8 +656,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -717,6 +717,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -738,8 +739,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -800,6 +800,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -821,8 +822,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -883,6 +883,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -904,8 +905,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -966,6 +966,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -987,8 +988,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1049,6 +1049,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1070,8 +1071,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1132,6 +1132,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1153,8 +1154,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1215,6 +1215,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1236,8 +1237,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1298,6 +1298,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1319,8 +1320,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1381,6 +1381,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1402,8 +1403,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1464,6 +1464,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1485,8 +1486,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1547,6 +1547,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1568,8 +1569,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1630,6 +1630,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1651,8 +1652,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1713,6 +1713,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1734,8 +1735,7 @@ nextflow_workflow {
                     workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.versions
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
@@ -1798,6 +1798,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1873,6 +1874,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1894,8 +1896,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -1958,6 +1959,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -1979,8 +1981,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2043,6 +2044,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2064,8 +2066,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2128,6 +2129,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2197,6 +2199,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2218,8 +2221,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2282,6 +2284,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2303,8 +2306,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2367,6 +2369,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2388,8 +2391,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2452,6 +2454,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2473,8 +2476,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2537,6 +2539,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2558,8 +2561,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2622,6 +2624,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2643,8 +2646,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2707,6 +2709,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2728,8 +2731,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2792,6 +2794,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2813,8 +2816,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2877,6 +2879,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2898,8 +2901,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -2962,6 +2964,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -2983,8 +2986,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -3047,6 +3049,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -3068,8 +3071,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -3132,6 +3134,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -3153,8 +3156,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -3217,6 +3219,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -3238,8 +3241,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -3302,6 +3304,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -3323,8 +3326,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -3387,6 +3389,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -3456,6 +3459,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -3477,8 +3481,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
@@ -3541,6 +3544,7 @@ nextflow_workflow {
                 input[28] = use_sentieon_star
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
                 """
             }
         }
@@ -3562,8 +3566,7 @@ nextflow_workflow {
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
                     workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
