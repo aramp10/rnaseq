@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## dev - xxxx-xx-xx
+
+### Credits
+
+### Enhancements and fixes
+
+- [PR #TBC](https://github.com/nf-core/rnaseq/pull/TBC) - Bump version to 3.26.0dev after release 3.25.0; flip the MultiQC report links and RO-Crate URL/version back to dev (also fixes a stray `/tag/` path in the MultiQC report link that slipped into the 3.25.0 release — `/tag/<name>` is a GitHub 404, `/tree/<name>` is the correct form)
+
 ## [[3.25.0](https://github.com/nf-core/rnaseq/releases/tag/3.25.0)] - 2026-04-24
 
 ### Credits
