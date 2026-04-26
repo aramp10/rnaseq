@@ -3,9 +3,9 @@ process TRIMGALORE {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_2' :
-        'biocontainers/trim-galore:0.6.10--hdfd78af_2'}"
+        'quay.io/biocontainers/trim-galore:0.6.10--hdfd78af_2'}"
 
     input:
     tuple val(meta), path(reads)
@@ -46,6 +46,9 @@ process TRIMGALORE {
         def args_list = args.split("\\s(?=--)").toList()
         args_list.removeAll { arg -> arg.toLowerCase().contains('_r2 ') }
         """
+        # Remove any trim_galore outputs left behind by a previous attempt that
+        # ran in this same workdir (e.g. AWS Batch retry after a Spot reclaim).
+        rm -f *.fq.gz *.html *.zip *_trimming_report.txt
         [ ! -f  ${prefix}.fastq.gz ] && ln -s ${reads} ${prefix}.fastq.gz
         trim_galore \\
             ${args_list.join(' ')} \\
@@ -56,6 +59,9 @@ process TRIMGALORE {
     }
     else {
         """
+        # Remove any trim_galore outputs left behind by a previous attempt that
+        # ran in this same workdir (e.g. AWS Batch retry after a Spot reclaim).
+        rm -f *.fq.gz *.html *.zip *_trimming_report.txt
         [ ! -f  ${prefix}_1.fastq.gz ] && ln -s ${reads[0]} ${prefix}_1.fastq.gz
         [ ! -f  ${prefix}_2.fastq.gz ] && ln -s ${reads[1]} ${prefix}_2.fastq.gz
         trim_galore \\
