@@ -3,7 +3,7 @@ process TRIMGALORE {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "ghcr.io/felixkrueger/trimgalore@sha256:3d8e9c90555cb47176ea4f7527230c59995f402af6a32d3ef7b3428ca5d6b337"
+    container "ghcr.io/felixkrueger/trimgalore@sha256:9a7f7ddedde9df5400a1819fd22fd0fae20c8c9f41bbcd5ac7ea382178c794f0"
 
     input:
     tuple val(meta), path(reads)
@@ -14,7 +14,7 @@ process TRIMGALORE {
     tuple val(meta), path("*unpaired{,_1,_2}.fq.gz"), emit: unpaired, optional: true
     tuple val(meta), path("*.html"), emit: html, optional: true
     tuple val(meta), path("*.zip"), emit: zip, optional: true
-    tuple val("${task.process}"), val("trimgalore"), eval('trim_galore --version | grep -Eo "[0-9]+(\\.[0-9]+)+"'), topic: versions, emit: versions_trimgalore
+    tuple val("${task.process}"), val("trimgalore"), eval('trim_galore --version | grep -Eo "[0-9]+(\.[0-9]+)+"'), topic: versions, emit: versions_trimgalore
 
     when:
     task.ext.when == null || task.ext.when
@@ -41,14 +41,14 @@ process TRIMGALORE {
     // Added soft-links to original fastqs for consistent naming in MultiQC
     def prefix = task.ext.prefix ?: "${meta.id}"
     if (meta.single_end) {
-        def args_list = args.split("\\s(?=--)").toList()
+        def args_list = args.split("\s(?=--)").toList()
         args_list.removeAll { arg -> arg.toLowerCase().contains('_r2 ') }
         """
         [ ! -f  ${prefix}.fastq.gz ] && ln -s ${reads} ${prefix}.fastq.gz
-        trim_galore \\
-            ${args_list.join(' ')} \\
-            --cores ${cores} \\
-            --gzip \\
+        trim_galore \
+            ${args_list.join(' ')} \
+            --cores ${cores} \
+            --gzip \
             ${prefix}.fastq.gz
         """
     }
@@ -56,12 +56,12 @@ process TRIMGALORE {
         """
         [ ! -f  ${prefix}_1.fastq.gz ] && ln -s ${reads[0]} ${prefix}_1.fastq.gz
         [ ! -f  ${prefix}_2.fastq.gz ] && ln -s ${reads[1]} ${prefix}_2.fastq.gz
-        trim_galore \\
-            ${args} \\
-            --cores ${cores} \\
-            --paired \\
-            --gzip \\
-            ${prefix}_1.fastq.gz \\
+        trim_galore \
+            ${args} \
+            --cores ${cores} \
+            --paired \
+            --gzip \
+            ${prefix}_1.fastq.gz \
             ${prefix}_2.fastq.gz
         """
     }
