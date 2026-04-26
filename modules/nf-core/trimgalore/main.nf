@@ -46,6 +46,8 @@ process TRIMGALORE {
         def args_list = args.split("\\s(?=--)").toList()
         args_list.removeAll { arg -> arg.toLowerCase().contains('_r2 ') }
         """
+        # Drop any trim_galore output left over from an interrupted previous attempt.
+        rm -f ${prefix}_trimmed.fq.gz
         [ ! -f  ${prefix}.fastq.gz ] && ln -s ${reads} ${prefix}.fastq.gz
         trim_galore \\
             ${args_list.join(' ')} \\
@@ -56,11 +58,9 @@ process TRIMGALORE {
     }
     else {
         """
-        # Remove the per-mate intermediates trim_galore produces during --paired
-        # processing and would normally unlink once validate_paired_end_files
-        # succeeds. If a previous attempt was interrupted between cutadapt and
-        # validation (e.g. AWS Batch retry after a Spot reclaim), these survive
-        # and the output glob picks up 3 fastqs instead of 2.
+        # Drop the per-mate intermediates --paired writes before validate_paired_end_files
+        # unlinks them. An attempt interrupted between cutadapt and validation leaves these
+        # behind and the output glob then matches 3 fastqs instead of 2.
         rm -f ${prefix}_1_trimmed.fq.gz ${prefix}_2_trimmed.fq.gz
         [ ! -f  ${prefix}_1.fastq.gz ] && ln -s ${reads[0]} ${prefix}_1.fastq.gz
         [ ! -f  ${prefix}_2.fastq.gz ] && ln -s ${reads[1]} ${prefix}_2.fastq.gz
