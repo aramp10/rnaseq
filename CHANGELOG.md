@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhancements and fixes
 
+- [PR #1821](https://github.com/nf-core/rnaseq/pull/1821) - Bump version to 3.26.0dev after release 3.25.0; flip the MultiQC report links and RO-Crate URL/version back to dev
 - [PR #1823](https://github.com/nf-core/rnaseq/pull/1823) - Patch: reinstall `trimgalore` module to pull in [nf-core/modules#11308](https://github.com/nf-core/modules/pull/11308), which removes orphan `*_trimmed.fq.gz` outputs left in the workdir by an interrupted previous trim_galore attempt (e.g. AWS Batch retry after a Spot reclaim) that were breaking `FQ_LINT_AFTER_TRIMMING` ([#1807](https://github.com/nf-core/rnaseq/issues/1807)). Bump version to 3.25.1.
 
 ## [[3.25.0](https://github.com/nf-core/rnaseq/releases/tag/3.25.0)] - 2026-04-24
