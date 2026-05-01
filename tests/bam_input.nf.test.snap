@@ -794,6 +794,7 @@
                 "star_salmon/salmon.merged.transcript_lengths.tsv",
                 "star_salmon/salmon.merged.transcript_tpm.tsv",
                 "star_salmon/salmon.merged.tx2gene.tsv",
+                "star_salmon/salmon.merged.tx2gene_augmented.tsv",
                 "star_salmon/samtools_stats",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.flagstat",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.idxstats",
@@ -921,6 +922,7 @@
                 "WT_REP1.infer_experiment.txt:md5,bf0c137f5fca06e7c40e1984a1acb06d",
                 "WT_REP2.infer_experiment.txt:md5,82e23b329ee60709f343bc2d17d43b14",
                 "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "e2t.ctab:md5,54dd6de2daa90e973f47524a738a3d69",
                 "e_data.ctab:md5,98a2b6a7555e58c7f21b45a1f48e5cbf",
                 "i2t.ctab:md5,dda3d3ccd7d4184d947c654ae73efb7b",
@@ -943,10 +945,10 @@
                 "i_data.ctab:md5,041edee3193df311f621c09f4991892b"
             ]
         ],
-        "timestamp": "2026-04-22T17:10:55.214026301",
+        "timestamp": "2026-05-01T16:21:06.387606618",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     },
     "BAM input for RSEM": {
@@ -1605,6 +1607,7 @@
                 "star_rsem/rsem.merged.transcript_lengths.tsv",
                 "star_rsem/rsem.merged.transcript_tpm.tsv",
                 "star_rsem/rsem.merged.tx2gene.tsv",
+                "star_rsem/rsem.merged.tx2gene_augmented.tsv",
                 "star_rsem/rsem_merge_counts",
                 "star_rsem/rsem_merge_counts/rsem.merged.gene_counts.tsv",
                 "star_rsem/rsem_merge_counts/rsem.merged.gene_tpm.tsv",
@@ -1835,6 +1838,7 @@
                 "rsem.merged.transcript_lengths.tsv:md5,abcbf186029d6accc817a5b84a71e650",
                 "rsem.merged.transcript_tpm.tsv:md5,2368b7b8e5561ff2d5a0672bb2f0301b",
                 "rsem.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "rsem.merged.tx2gene_augmented.tsv:md5,62f1be3e94901085640179b604d879a2",
                 "rsem.merged.gene_counts.tsv:md5,e1094c70c24d144681828840da3d968d",
                 "rsem.merged.gene_tpm.tsv:md5,7f78363b53c3d46bbab8976fb65c24ba",
                 "rsem.merged.genes_long.tsv:md5,e276f036e78bb06241f8f252b0aa57cb",
@@ -1868,10 +1872,10 @@
                 "i_data.ctab:md5,7e81ace0a68bfe42482420b7275de195"
             ]
         ],
-        "timestamp": "2026-04-22T17:11:00.247700127",
+        "timestamp": "2026-05-01T16:23:34.874577699",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     }
 }

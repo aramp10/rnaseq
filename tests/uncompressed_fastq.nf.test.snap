@@ -1118,6 +1118,7 @@
                 "star_salmon/salmon.merged.transcript_lengths.tsv",
                 "star_salmon/salmon.merged.transcript_tpm.tsv",
                 "star_salmon/salmon.merged.tx2gene.tsv",
+                "star_salmon/salmon.merged.tx2gene_augmented.tsv",
                 "star_salmon/samtools_stats",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.flagstat",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.idxstats",
@@ -1321,6 +1322,7 @@
                 "WT_REP1b.infer_experiment.txt:md5,b60f8445f1216b0045805332ab1b3062",
                 "WT_REP2.infer_experiment.txt:md5,172b4693066f1fdfff07d9b053e1e387",
                 "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "e2t.ctab:md5,54dd6de2daa90e973f47524a738a3d69",
                 "e_data.ctab:md5,98a2b6a7555e58c7f21b45a1f48e5cbf",
                 "i2t.ctab:md5,dda3d3ccd7d4184d947c654ae73efb7b",
@@ -1347,10 +1349,10 @@
                 "i_data.ctab:md5,fca03502dd5b5e2831a64ff133d8c0b5"
             ]
         ],
-        "timestamp": "2026-04-22T17:29:28.690498135",
+        "timestamp": "2026-05-01T16:42:13.259071468",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     }
 }

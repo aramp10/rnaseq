@@ -349,6 +349,7 @@
                 "salmon/salmon.merged.transcript_lengths.tsv",
                 "salmon/salmon.merged.transcript_tpm.tsv",
                 "salmon/salmon.merged.tx2gene.tsv",
+                "salmon/salmon.merged.tx2gene_augmented.tsv",
                 "trimgalore",
                 "trimgalore/RAP1_IAA_30M_REP1_trimmed_1.fastq.gz_trimming_report.txt",
                 "trimgalore/RAP1_IAA_30M_REP1_trimmed_2.fastq.gz_trimming_report.txt",
@@ -415,13 +416,14 @@
                 "observed_bias_3p.gz:md5,92bcd0592d22a6a58d0360fc76103e56",
                 "cmd_info.json:md5,3e6d06d032abd3f5cd7e79df1b5bcde0",
                 "lib_format_counts.json:md5,fce2c4840048c294c016f45f0df15384",
-                "salmon.merged.tx2gene.tsv:md5,1be389a28cc26d94b19ea918959ac72e"
+                "salmon.merged.tx2gene.tsv:md5,1be389a28cc26d94b19ea918959ac72e",
+                "salmon.merged.tx2gene_augmented.tsv:md5,1be389a28cc26d94b19ea918959ac72e"
             ]
         ],
+        "timestamp": "2026-05-01T16:26:57.542948212",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-02-26T14:11:36.231165357"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     }
 }
