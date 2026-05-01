@@ -67,6 +67,14 @@
                     ]
                 ],
                 "8": [
+                    [
+                        [
+                            
+                        ],
+                        "[].tx2gene_augmented.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "9": [
                     "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
                 ],
                 "counts_gene": [
@@ -133,16 +141,24 @@
                         "[].transcript_tpm.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
+                "tx2gene_augmented": [
+                    [
+                        [
+                            
+                        ],
+                        "[].tx2gene_augmented.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
                 "versions": [
                     "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
                 ]
             }
         ],
-        "timestamp": "2026-04-09T11:02:50.661043856",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-01T15:56:45.750356"
     },
     "saccharomyces_cerevisiae - salmon - gtf": {
         "content": [
@@ -211,14 +227,22 @@
                 ]
             ],
             [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
+                ]
+            ],
+            [
                 "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
             ]
         ],
-        "timestamp": "2026-04-09T11:03:02.256857186",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-01T15:58:26.564953"
     },
     "saccharomyces_cerevisiae - salmon - gtf - stub": {
         "content": [
@@ -288,6 +312,14 @@
                     ]
                 ],
                 "8": [
+                    [
+                        [
+                            
+                        ],
+                        "[].tx2gene_augmented.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "9": [
                     "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
                 ],
                 "counts_gene": [
@@ -354,16 +386,24 @@
                         "[].transcript_tpm.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
+                "tx2gene_augmented": [
+                    [
+                        [
+                            
+                        ],
+                        "[].tx2gene_augmented.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
                 "versions": [
                     "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
                 ]
             }
         ],
-        "timestamp": "2026-04-09T11:03:28.936272282",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-01T16:02:19.043032"
     },
     "saccharomyces_cerevisiae - kallisto - gtf - custom_column_names": {
         "content": [
@@ -432,14 +472,22 @@
                 ]
             ],
             [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.tx2gene_augmented.tsv:md5,3605073f7d538976ebdb61bc94081b7c"
+                ]
+            ],
+            [
                 "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
             ]
         ],
-        "timestamp": "2026-04-09T11:04:06.859776382",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-01T16:06:00.288547"
     },
     "saccharomyces_cerevisiae - rsem - gtf - stub": {
         "content": [
@@ -509,6 +557,14 @@
                     ]
                 ],
                 "8": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.tx2gene_augmented.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "9": [
                     "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
                 ],
                 "counts_gene": [
@@ -575,16 +631,24 @@
                         "test.transcript_tpm.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
+                "tx2gene_augmented": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.tx2gene_augmented.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
                 "versions": [
                     "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
                 ]
             }
         ],
-        "timestamp": "2026-04-09T11:03:55.191304215",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-01T16:04:28.917088"
     },
     "saccharomyces_cerevisiae - kallisto - gtf": {
         "content": [
@@ -653,14 +717,22 @@
                 ]
             ],
             [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
+                ]
+            ],
+            [
                 "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
             ]
         ],
-        "timestamp": "2026-04-09T11:02:24.289256682",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-01T15:52:53.149287"
     },
     "saccharomyces_cerevisiae - rsem - gtf": {
         "content": [
@@ -732,11 +804,11 @@
                 "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
             ]
         ],
-        "timestamp": "2026-04-09T11:03:40.511252751",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-04-09T11:03:40.511252751"
     },
     "saccharomyces_cerevisiae - kallisto - gtf - extra_attributes": {
         "content": [
@@ -805,13 +877,21 @@
                 ]
             ],
             [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
+                ]
+            ],
+            [
                 "versions.yml:md5,6ff317cceddc686f84d79cb976e1e28b"
             ]
         ],
-        "timestamp": "2026-04-09T11:02:35.957379387",
         "meta": {
-            "nf-test": "0.9.5",
+            "nf-test": "0.9.3",
             "nextflow": "25.10.4"
-        }
+        },
+        "timestamp": "2026-05-01T15:54:31.187813"
     }
 }
