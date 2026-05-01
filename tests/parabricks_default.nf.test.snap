@@ -544,6 +544,7 @@
                 "star_salmon/salmon.merged.transcript_lengths.tsv",
                 "star_salmon/salmon.merged.transcript_tpm.tsv",
                 "star_salmon/salmon.merged.tx2gene.tsv",
+                "star_salmon/salmon.merged.tx2gene_augmented.tsv",
                 "star_salmon/samtools_stats",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.sorted.bam.flagstat",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.sorted.bam.idxstats",
@@ -626,7 +627,8 @@
                 "RAP1_UNINDUCED_REP2.SJ.out.tab:md5,1f294365343a1a5e95682792fdb77033",
                 "WT_REP1.SJ.out.tab:md5,1350c2fa6a675bf107386c6cd3fc5204",
                 "WT_REP2.SJ.out.tab:md5,f6cc03643a5e3c1025a5b4754eb1be23",
-                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
+                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
             ]
         ],
         "meta": {
@@ -1362,6 +1364,7 @@
                 "star_salmon/salmon.merged.transcript_lengths.tsv",
                 "star_salmon/salmon.merged.transcript_tpm.tsv",
                 "star_salmon/salmon.merged.tx2gene.tsv",
+                "star_salmon/salmon.merged.tx2gene_augmented.tsv",
                 "star_salmon/samtools_stats",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.sorted.bam.flagstat",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.sorted.bam.idxstats",
@@ -1444,7 +1447,8 @@
                 "RAP1_UNINDUCED_REP2.SJ.out.tab:md5,1f294365343a1a5e95682792fdb77033",
                 "WT_REP1.SJ.out.tab:md5,1350c2fa6a675bf107386c6cd3fc5204",
                 "WT_REP2.SJ.out.tab:md5,f6cc03643a5e3c1025a5b4754eb1be23",
-                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
+                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
             ]
         ],
         "meta": {
