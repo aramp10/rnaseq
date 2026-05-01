@@ -1019,6 +1019,7 @@ When `--skip_quantification_merge` is enabled, the merged cross-sample files abo
   - `<SAMPLE>.gene_counts_length_scaled.tsv`: Length-scaled gene counts for this sample.
   - `<SAMPLE>.transcript_counts.tsv`: Transcript-level raw counts for this sample.
   - `<SAMPLE>.transcript_tpm.tsv`: Transcript-level TPM values for this sample.
+  - `<SAMPLE>.tx2gene_augmented.tsv`: The tx2gene table actually used by `tximport` for this sample (input mappings plus self-mappings for any orphan transcripts). Use this file (not the GTF-derived `<pseudo_aligner>.merged.tx2gene.tsv` published at the workflow level) to reproduce this sample's gene-level outputs from its `quant.sf` / `abundance.tsv`.
 
 SummarizedExperiment RDS objects and DESeq2 QC outputs are skipped in this mode. See the [usage documentation](https://nf-co.re/rnaseq/usage#per-sample-quantification---skip_quantification_merge) for details.
 
