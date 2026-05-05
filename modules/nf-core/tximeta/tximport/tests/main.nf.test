@@ -256,7 +256,7 @@ nextflow_process {
                 input[1] = CUSTOM_TX2GENE.out.tx2gene.map { meta, tx2gene ->
                     def lines = tx2gene.readLines()
                     def header = lines[0]
-                    def kept = lines[1..Math.max(1, (int)(lines.size() / 2))]
+                    def kept = lines[1..Math.max(1, lines.size().intdiv(2))]
                     def modified = file("\${workDir}/truncated_tx2gene.tsv")
                     modified.text = ([header] + kept).join('\\n') + '\\n'
                     [meta, modified]
