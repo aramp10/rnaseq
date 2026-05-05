@@ -14,11 +14,10 @@ nextflow_workflow {
                 input[2] = true // plaintext_email (boolean)
                 input[3] = "${outputDir}" // outputDir (string)
                 input[4] = true // monochrome_logs (boolean)
-                input[5] = null // hook_url (string)
-                input[6] = "${outputDir}/multiqc_report.html" // multiqc_report (string)
+                input[5] = "${outputDir}/multiqc_report.html" // multiqc_report (string)
+                input[6] = Channel.of(['test_sample', true])
                 input[7] = Channel.of(['test_sample', true])
                 input[8] = Channel.of(['test_sample', true])
-                input[9] = Channel.of(['test_sample', true])
                 """
             }
         }
