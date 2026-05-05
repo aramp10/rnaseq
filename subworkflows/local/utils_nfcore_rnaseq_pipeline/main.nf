@@ -13,7 +13,6 @@ include { paramsSummaryMap          } from 'plugin/nf-schema'
 include { paramsHelp                } from 'plugin/nf-schema'
 include { completionEmail           } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary         } from '../../nf-core/utils_nfcore_pipeline'
-include { imNotification            } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE     } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE   } from '../../nf-core/utils_nextflow_pipeline'
 include { logColours                } from '../../nf-core/utils_nfcore_pipeline'
@@ -116,7 +115,6 @@ workflow PIPELINE_COMPLETION {
     plaintext_email // boolean: Send plain-text email instead of HTML
     outdir          //    path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
-    hook_url        //  string: hook URL for notifications
     multiqc_report  //  string: Path to MultiQC report
     trim_status        // map: pass/fail status per sample for trimming
     map_status         // map: pass/fail status per sample for mapping
@@ -162,10 +160,6 @@ workflow PIPELINE_COMPLETION {
         }
 
         rnaseqSummary(monochrome_logs, pass_mapped_reads, pass_trimmed_reads, pass_strand_check)
-
-        if (hook_url) {
-            imNotification(summary_params, hook_url)
-        }
     }
 
     workflow.onError {

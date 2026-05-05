@@ -934,15 +934,6 @@
                     "fa_icon": "fas fa-palette",
                     "hidden": true
                 },
-                "hook_url": {
-                    "type": "string",
-                    "format": "uri",
-                    "minLength": 1,
-                    "description": "Incoming Webhook URL for messaging service",
-                    "fa_icon": "fas fa-people-group",
-                    "help_text": "URL for messaging service integration. Currently supports Microsoft Teams and Slack.",
-                    "hidden": true
-                },
                 "multiqc_config": {
                     "type": "string",
                     "format": "file-path",
