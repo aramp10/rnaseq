@@ -176,6 +176,31 @@ table_columns_visible:
   "FastQC (filtered)":
     percent_duplicates: false
 
+# Disambiguate the General Stats table when FastQC is registered in
+# multiple stages (raw / trimmed / filtered). MultiQC namespaces the
+# data per-stage but renders all three with the same column titles, so
+# without these overrides users see three identical "Seqs", "GC", etc.
+# columns side by side.
+table_columns_name:
+  "FastQC (raw)":
+    percent_gc: "GC (raw)"
+    avg_sequence_length: "Avg len (raw)"
+    median_sequence_length: "Median len (raw)"
+    percent_fails: "Failed (raw)"
+    total_sequences: "Seqs (raw)"
+  "FastQC (trimmed)":
+    percent_gc: "GC (trim)"
+    avg_sequence_length: "Avg len (trim)"
+    median_sequence_length: "Median len (trim)"
+    percent_fails: "Failed (trim)"
+    total_sequences: "Seqs (trim)"
+  "FastQC (filtered)":
+    percent_gc: "GC (filt)"
+    avg_sequence_length: "Avg len (filt)"
+    median_sequence_length: "Median len (filt)"
+    percent_fails: "Failed (filt)"
+    total_sequences: "Seqs (filt)"
+
 extra_fn_clean_exts:
   - ".sortmerna"
   - ".umi_dedup"
