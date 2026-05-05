@@ -441,6 +441,7 @@ results/
 When enabled:
 
 - **tximport** runs per-sample, producing individual gene-level and transcript-level count/TPM TSVs for each sample
+- The `*gene_counts_length_scaled.tsv` file is not published, because per-sample `lengthScaledTPM` values are not comparable across samples ([#1822](https://github.com/nf-core/rnaseq/issues/1822)). To obtain it, re-run tximport across all `quant.sf` files in a single call
 - **SummarizedExperiment** and **RSEM merge counts** are skipped entirely
 - **DESeq2 QC** is skipped (requires multiple samples)
 - **MultiQC** generates one report per sample rather than one merged report. Per-sample reports carry a manifest-only software versions section (pipeline name and Nextflow version); the full collated tool versions YAML is still published unchanged to `pipeline_info/`
@@ -466,7 +467,7 @@ nextflow run nf-core/rnaseq \
 ```
 
 :::tip
-Per-sample tximport TSVs can be combined downstream using standard R or Python tooling if cross-sample matrices are needed later. This gives you flexibility to run the pipeline incrementally as new samples arrive without reprocessing the entire cohort.
+Per-sample tximport TSVs can be combined downstream using standard R or Python tooling if cross-sample matrices are needed later. This gives you flexibility to run the pipeline incrementally as new samples arrive without reprocessing the entire cohort. Note that `lengthScaledTPM` cannot simply be concatenated and must be recomputed by passing all `quant.sf` files to a single tximport call.
 :::
 
 ### Unique Molecular Identifiers (UMI)
