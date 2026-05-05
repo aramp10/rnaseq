@@ -3,7 +3,6 @@ lint:
   files_exist:
     - conf/modules.config
   files_unchanged:
-    - .github/CONTRIBUTING.md
     - assets/email_template.html
     - assets/email_template.txt
     - assets/nf-core-rnaseq_logo_light.png
@@ -19,7 +18,7 @@ lint:
 nf_core_version: 4.0.2
 repository_type: pipeline
 template:
-  author: "Harshil Patel, Phil Ewels, Rickard Hammar\xE9n"
+  author: "Harshil Patel, Phil Ewels, Rickard Hammarén"
   description: RNA sequencing analysis pipeline for gene/isoform quantification and
     extensive quality control.
   force: false
@@ -27,4 +26,4 @@ template:
   name: rnaseq
   org: nf-core
   outdir: .
-  version: 3.25.1
+  version: 3.26.0dev
