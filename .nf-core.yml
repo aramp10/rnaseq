@@ -2,6 +2,7 @@ lint:
   actions_nf_test: false
   files_exist:
     - conf/modules.config
+    - assets/multiqc_config.yml
   files_unchanged:
     - assets/email_template.html
     - assets/email_template.txt
