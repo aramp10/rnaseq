@@ -1,8 +1,17 @@
 lint:
   actions_nf_test: false
+  container_configs: false
   files_exist:
     - conf/modules.config
     - assets/multiqc_config.yml
+    - conf/containers_conda_lock_files_amd64.config
+    - conf/containers_conda_lock_files_arm64.config
+    - conf/containers_docker_amd64.config
+    - conf/containers_docker_arm64.config
+    - conf/containers_singularity_https_amd64.config
+    - conf/containers_singularity_https_arm64.config
+    - conf/containers_singularity_oras_amd64.config
+    - conf/containers_singularity_oras_arm64.config
   files_unchanged:
     - assets/email_template.html
     - assets/email_template.txt
