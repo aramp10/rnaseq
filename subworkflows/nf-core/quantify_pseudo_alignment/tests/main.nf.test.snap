@@ -50,13 +50,21 @@
                     },
                     "kallisto.merged.transcript_tpm.tsv:md5,de458e1c2a579e53bd7671c5176f5d0c"
                 ]
+            ],
+            [
+                [
+                    {
+                        "id": "all_samples"
+                    },
+                    "kallisto.merged.tx2gene_augmented.tsv:md5,0c90bf5e4caa6924cae4a6330238de63"
+                ]
             ]
         ],
+        "timestamp": "2026-05-05T10:39:43.546731003",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-02-11T10:00:30.637566635"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     },
     "salmon - stub": {
         "content": [
@@ -295,11 +303,11 @@
                 ]
             }
         ],
+        "timestamp": "2026-05-05T10:40:05.925322527",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-01T16:14:46.920882"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     },
     "kallisto - stub": {
         "content": [
@@ -534,11 +542,11 @@
                 ]
             }
         ],
+        "timestamp": "2026-05-05T10:40:28.277479493",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-01T16:17:37.573079"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     },
     "salmon": {
         "content": [
@@ -609,10 +617,10 @@
                 ]
             ]
         ],
+        "timestamp": "2026-05-05T10:39:14.072956572",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-01T16:11:16.360273"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     }
 }

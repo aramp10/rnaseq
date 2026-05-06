@@ -84,11 +84,11 @@
                 ]
             ]
         ],
+        "timestamp": "2026-05-05T10:37:18.465577469",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-01T16:13:42.729875"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     },
     "salmon - stub": {
         "content": [
@@ -287,11 +287,11 @@
                 ]
             }
         ],
+        "timestamp": "2026-05-05T10:37:56.798812629",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-01T16:16:32.437132"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     },
     "kallisto - stub": {
         "content": [
@@ -490,11 +490,11 @@
                 ]
             }
         ],
+        "timestamp": "2026-05-05T10:38:17.567127486",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-01T16:19:00.412033"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     },
     "rsem - stub": {
         "content": [
@@ -693,11 +693,11 @@
                 ]
             }
         ],
+        "timestamp": "2026-05-05T10:38:38.378124334",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-01T16:21:02.738345"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     },
     "salmon": {
         "content": [
@@ -784,11 +784,11 @@
                 ]
             ]
         ],
+        "timestamp": "2026-05-05T10:37:00.881134125",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.4"
-        },
-        "timestamp": "2026-05-01T16:11:18.12121"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     },
     "rsem": {
         "content": [
@@ -865,12 +865,20 @@
                     },
                     "rsem.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
                 ]
+            ],
+            [
+                [
+                    {
+                        "id": "all_samples"
+                    },
+                    "rsem.merged.tx2gene_augmented.tsv:md5,58aa7e040b0ff1a512ced6b85b9939ac"
+                ]
             ]
         ],
+        "timestamp": "2026-05-05T10:37:35.975221766",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-02-11T10:14:57.262417912"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.0"
+        }
     }
 }
