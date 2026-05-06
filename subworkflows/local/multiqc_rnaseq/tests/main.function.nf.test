@@ -488,6 +488,7 @@ headers:
                     def sorted = keys.toSorted()
                     assert keys == sorted : "Expected sample keys in alphabetical order, got: ${keys}"
                 },
+                { assert snapshot(function.result).match() },
             )
         }
     }
