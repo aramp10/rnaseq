@@ -725,7 +725,7 @@ For more information, see the upstream issues:
 
 #### iGenomes (not recommended)
 
-If `--genome` resolves to an iGenomes entry (e.g. `--genome GRCh37`), the FASTA, GTF, and pre-built indices are obtained from AWS iGenomes unless mirrored locally via `--igenomes_base`. iGenomes entries are flagged with `star_legacy = true`, which pins STAR alignment to 2.6.1d for compatibility with the catalogue's pre-built indices (built before STAR 2.7's index format changes).
+If `--genome` resolves to an iGenomes entry (e.g. `--genome GRCh37`), the FASTA, GTF, and pre-built indices are obtained from AWS iGenomes unless mirrored locally via `--igenomes_base`. iGenomes entries that ship a pre-built STAR index are flagged with `star_legacy = true`, which pins STAR alignment to 2.6.1d for compatibility with those indices (built before STAR 2.7's index format changes).
 
 If you override the resolved index by supplying your own `--star_index`, the pin is bypassed and the pipeline aligns with the modern STAR version it ships (currently 2.7.11b). The pipeline assumes the supplied index is compatible with that version, so it should have been built with the same version or a sufficiently close release. An older index (e.g. one built with STAR 2.6.x) will fail to load with `unrecoginzed parameter name "genomeType"` (or similar). The fix is to rebuild the index against modern STAR, or to drop `--star_index` and let the resolved (legacy-pinned) iGenomes index handle alignment.
 

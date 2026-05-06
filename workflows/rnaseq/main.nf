@@ -264,7 +264,7 @@ workflow RNASEQ {
     if (!params.skip_alignment && (params.aligner == 'star_salmon' || params.aligner == 'star_rsem')) {
         // Pin legacy STAR (2.6.1d) when the genomes-map entry opts in via star_legacy
         // and the user has not overridden --star_index with a custom build.
-        def genome_entry    = params.genomes?.get(params.genome)
+        def genome_entry    = params.genomes && params.genome ? params.genomes[params.genome] : null
         def use_legacy_star = genome_entry?.star_legacy && params.star_index == genome_entry.star
 
         ALIGN_STAR (
