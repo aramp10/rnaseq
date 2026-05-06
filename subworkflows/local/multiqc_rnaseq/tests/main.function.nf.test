@@ -448,7 +448,15 @@ headers:
                     headers: [
                         provided:        [title: 'Provided'],
                         salmon_inferred: [title: 'Salmon inferred'],
+                        salmon_pct:      [title: 'Salmon %'],
+                        salmon_s:        [title: 'Salmon Sense %'],
+                        salmon_a:        [title: 'Salmon Antisense %'],
+                        salmon_u:        [title: 'Salmon Unstranded %'],
                         rseqc_inferred:  [title: 'RSeQC inferred'],
+                        rseqc_pct:       [title: 'RSeQC %'],
+                        rseqc_s:         [title: 'RSeQC Sense %'],
+                        rseqc_a:         [title: 'RSeQC Antisense %'],
+                        rseqc_u:         [title: 'RSeQC Unstranded %'],
                         status:          [title: 'Status'],
                     ],
                 ]
