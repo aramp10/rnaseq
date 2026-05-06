@@ -59,6 +59,20 @@ workflow NFCORE_RNASEQ {
     //
     // SUBWORKFLOW: Prepare reference genome files
     //
+    // The genomes-map flag star_legacy = true marks indices built with STAR 2.6.x (e.g.
+    // the bundled AWS iGenomes catalogue), which need a genomeParameters.txt rewrite to
+    // load under STAR 2.7.4a+. The flag only fires when:
+    //  - the active entry has star_legacy = true,
+    //  - the user has not overridden the resolved index with their own --star_index, and
+    //  - alignment is going through stock STAR (Sentieon and Parabricks bundle older STAR
+    //    builds (Sentieon ~2.7.0e, Parabricks 2.7.2a) that already accept versionGenome
+    //    20201 and would reject the upgraded 2.7.4a tag).
+    def genome_entry  = params.genomes && params.genome ? params.genomes[params.genome] : null
+    def star_index_legacy = genome_entry?.star_legacy &&
+                            params.star_index == genome_entry.star &&
+                            !params.use_sentieon_star &&
+                            !params.use_parabricks_star
+
     PREPARE_GENOME (
         params.fasta,
         params.gtf,
@@ -91,7 +105,8 @@ workflow NFCORE_RNASEQ {
         params.use_sentieon_star,
         params.use_parabricks_star,
         params.contaminant_screening,
-        params.prokaryotic ?: false
+        params.prokaryotic ?: false,
+        star_index_legacy ?: false
     )
 
     // Check if contigs in genome fasta file > 512 Mbp
