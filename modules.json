@@ -354,7 +354,7 @@
                     },
                     "tximeta/tximport": {
                         "branch": "master",
-                        "git_sha": "21e4662ae927fdbc5fc04eec9bde38b0689d4954",
+                        "git_sha": "77df703775155f3f0f8922f9354501e0289348c2",
                         "installed_by": ["quant_tximport_summarizedexperiment", "quantify_pseudo_alignment"]
                     },
                     "ucsc/bedclip": {
@@ -483,12 +483,12 @@
                     },
                     "quant_tximport_summarizedexperiment": {
                         "branch": "master",
-                        "git_sha": "77378d340769713877b6a7f72fb7b66f89e65a4c",
+                        "git_sha": "77df703775155f3f0f8922f9354501e0289348c2",
                         "installed_by": ["quantify_pseudo_alignment", "quantify_rsem"]
                     },
                     "quantify_pseudo_alignment": {
                         "branch": "master",
-                        "git_sha": "77378d340769713877b6a7f72fb7b66f89e65a4c",
+                        "git_sha": "77df703775155f3f0f8922f9354501e0289348c2",
                         "installed_by": ["subworkflows"]
                     },
                     "quantify_rsem": {

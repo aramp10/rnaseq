@@ -630,6 +630,7 @@
                 "salmon/salmon.merged.transcript_lengths.tsv",
                 "salmon/salmon.merged.transcript_tpm.tsv",
                 "salmon/salmon.merged.tx2gene.tsv",
+                "salmon/salmon.merged.tx2gene_augmented.tsv",
                 "star_salmon",
                 "star_salmon/RAP1_IAA_30M_REP1",
                 "star_salmon/RAP1_IAA_30M_REP1.markdup.sorted.bam",
@@ -1144,6 +1145,7 @@
                 "star_salmon/salmon.merged.transcript_lengths.tsv",
                 "star_salmon/salmon.merged.transcript_tpm.tsv",
                 "star_salmon/salmon.merged.tx2gene.tsv",
+                "star_salmon/salmon.merged.tx2gene_augmented.tsv",
                 "star_salmon/samtools_stats",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.flagstat",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.idxstats",
@@ -1284,6 +1286,7 @@
                 "cmd_info.json:md5,fe66c9d876645b9260d8c2488157d4d4",
                 "lib_format_counts.json:md5,4bf135c93c37f90c493f761f2709a28b",
                 "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "ambig_info.tsv:md5,d1d3bd2a5617220b29a9063cb29f0578",
                 "expected_bias.gz:md5,3407f87245d0003e0ffbfdf6d8c04f20",
                 "observed_bias.gz:md5,92bcd0592d22a6a58d0360fc76103e56",
@@ -1335,6 +1338,7 @@
                 "WT_REP1.infer_experiment.txt:md5,7e8c79fa27780693523ad7acd8f109c4",
                 "WT_REP2.infer_experiment.txt:md5,c895dbd41b5a075ad4032e2732145b6a",
                 "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "e2t.ctab:md5,70e6afcfb5e8477b0ef371477d9b4176",
                 "e_data.ctab:md5,91c9bebff23398e2cd962478a6b56c65",
                 "i2t.ctab:md5,2545fce97da6b7d3724e00f67328ec80",
@@ -1357,10 +1361,10 @@
                 "i_data.ctab:md5,042075e0929819608527f05b28b063d6"
             ]
         ],
-        "timestamp": "2026-04-22T17:33:36.961272897",
+        "timestamp": "2026-05-01T16:38:15.703046491",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     },
     "Params: --skip_trimming": {

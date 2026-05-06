@@ -285,6 +285,7 @@
                 "RAP1_IAA_30M_REP1/salmon/RAP1_IAA_30M_REP1.transcript_counts.tsv",
                 "RAP1_IAA_30M_REP1/salmon/RAP1_IAA_30M_REP1.transcript_lengths.tsv",
                 "RAP1_IAA_30M_REP1/salmon/RAP1_IAA_30M_REP1.transcript_tpm.tsv",
+                "RAP1_IAA_30M_REP1/salmon/RAP1_IAA_30M_REP1.tx2gene_augmented.tsv",
                 "RAP1_IAA_30M_REP1/salmon/RAP1_IAA_30M_REP1/aux_info",
                 "RAP1_IAA_30M_REP1/salmon/RAP1_IAA_30M_REP1/aux_info/ambig_info.tsv",
                 "RAP1_IAA_30M_REP1/salmon/RAP1_IAA_30M_REP1/aux_info/expected_bias.gz",
@@ -520,6 +521,7 @@
                 "RAP1_UNINDUCED_REP1/salmon/RAP1_UNINDUCED_REP1.transcript_counts.tsv",
                 "RAP1_UNINDUCED_REP1/salmon/RAP1_UNINDUCED_REP1.transcript_lengths.tsv",
                 "RAP1_UNINDUCED_REP1/salmon/RAP1_UNINDUCED_REP1.transcript_tpm.tsv",
+                "RAP1_UNINDUCED_REP1/salmon/RAP1_UNINDUCED_REP1.tx2gene_augmented.tsv",
                 "RAP1_UNINDUCED_REP1/salmon/RAP1_UNINDUCED_REP1/aux_info",
                 "RAP1_UNINDUCED_REP1/salmon/RAP1_UNINDUCED_REP1/aux_info/ambig_info.tsv",
                 "RAP1_UNINDUCED_REP1/salmon/RAP1_UNINDUCED_REP1/aux_info/expected_bias.gz",
@@ -754,6 +756,7 @@
                 "RAP1_UNINDUCED_REP2/salmon/RAP1_UNINDUCED_REP2.transcript_counts.tsv",
                 "RAP1_UNINDUCED_REP2/salmon/RAP1_UNINDUCED_REP2.transcript_lengths.tsv",
                 "RAP1_UNINDUCED_REP2/salmon/RAP1_UNINDUCED_REP2.transcript_tpm.tsv",
+                "RAP1_UNINDUCED_REP2/salmon/RAP1_UNINDUCED_REP2.tx2gene_augmented.tsv",
                 "RAP1_UNINDUCED_REP2/salmon/RAP1_UNINDUCED_REP2/aux_info",
                 "RAP1_UNINDUCED_REP2/salmon/RAP1_UNINDUCED_REP2/aux_info/ambig_info.tsv",
                 "RAP1_UNINDUCED_REP2/salmon/RAP1_UNINDUCED_REP2/aux_info/expected_bias.gz",
@@ -994,6 +997,7 @@
                 "WT_REP1/salmon/WT_REP1.transcript_counts.tsv",
                 "WT_REP1/salmon/WT_REP1.transcript_lengths.tsv",
                 "WT_REP1/salmon/WT_REP1.transcript_tpm.tsv",
+                "WT_REP1/salmon/WT_REP1.tx2gene_augmented.tsv",
                 "WT_REP1/salmon/WT_REP1/aux_info",
                 "WT_REP1/salmon/WT_REP1/aux_info/ambig_info.tsv",
                 "WT_REP1/salmon/WT_REP1/aux_info/expected_bias.gz",
@@ -1235,6 +1239,7 @@
                 "WT_REP2/salmon/WT_REP2.transcript_counts.tsv",
                 "WT_REP2/salmon/WT_REP2.transcript_lengths.tsv",
                 "WT_REP2/salmon/WT_REP2.transcript_tpm.tsv",
+                "WT_REP2/salmon/WT_REP2.tx2gene_augmented.tsv",
                 "WT_REP2/salmon/WT_REP2/aux_info",
                 "WT_REP2/salmon/WT_REP2/aux_info/ambig_info.tsv",
                 "WT_REP2/salmon/WT_REP2/aux_info/expected_bias.gz",
@@ -1284,6 +1289,7 @@
                 "multiqc_citations.txt:md5,f789abe663d4b4214f0ddeb413a7f150",
                 "multiqc_fastqc_fastqc_raw.txt:md5,90b14eb12f6923ab802bd1c36752856f",
                 "multiqc_fastqc_fastqc_trimmed.txt:md5,dea043eec248fc9af9014173d4c22748",
+                "RAP1_IAA_30M_REP1.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "ambig_info.tsv:md5,de973a4b22a4457217ae3dc04caf9401",
                 "expected_bias.gz:md5,3407f87245d0003e0ffbfdf6d8c04f20",
                 "observed_bias.gz:md5,92bcd0592d22a6a58d0360fc76103e56",
@@ -1315,6 +1321,7 @@
                 "multiqc_citations.txt:md5,f789abe663d4b4214f0ddeb413a7f150",
                 "multiqc_fastqc_fastqc_raw.txt:md5,f7523b0369288bd16dbcfa4eee85bdbe",
                 "multiqc_fastqc_fastqc_trimmed.txt:md5,0c9ff79024840d80c850bce19aace3aa",
+                "RAP1_UNINDUCED_REP1.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "ambig_info.tsv:md5,45f252b4f0e11e6730cf0c29f800fdbb",
                 "expected_bias.gz:md5,3407f87245d0003e0ffbfdf6d8c04f20",
                 "observed_bias.gz:md5,92bcd0592d22a6a58d0360fc76103e56",
@@ -1346,6 +1353,7 @@
                 "multiqc_citations.txt:md5,f789abe663d4b4214f0ddeb413a7f150",
                 "multiqc_fastqc_fastqc_raw.txt:md5,04aaed5c761fef5b8ee3172638c67642",
                 "multiqc_fastqc_fastqc_trimmed.txt:md5,7435c33a23fa63532bcd615b9e8d2075",
+                "RAP1_UNINDUCED_REP2.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "ambig_info.tsv:md5,6dcc2891ea572e9b8d1ba52cd434ab84",
                 "expected_bias.gz:md5,3407f87245d0003e0ffbfdf6d8c04f20",
                 "observed_bias.gz:md5,92bcd0592d22a6a58d0360fc76103e56",
@@ -1377,6 +1385,7 @@
                 "multiqc_citations.txt:md5,f789abe663d4b4214f0ddeb413a7f150",
                 "multiqc_fastqc_fastqc_raw.txt:md5,0615d8c4828bd26b16715cbb1a53fb5f",
                 "multiqc_fastqc_fastqc_trimmed.txt:md5,f197b911c18ab5840833ad69dfb68cc3",
+                "WT_REP1.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "ambig_info.tsv:md5,194f574e0586416155e3f33d42e2b167",
                 "expected_bias.gz:md5,3407f87245d0003e0ffbfdf6d8c04f20",
                 "observed_bias.gz:md5,92bcd0592d22a6a58d0360fc76103e56",
@@ -1408,6 +1417,7 @@
                 "multiqc_citations.txt:md5,f789abe663d4b4214f0ddeb413a7f150",
                 "multiqc_fastqc_fastqc_raw.txt:md5,916d790365b2e374be3fb03383664e30",
                 "multiqc_fastqc_fastqc_trimmed.txt:md5,f89aa02c2a66c22803b39e7ba11417d0",
+                "WT_REP2.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "ambig_info.tsv:md5,a26e3f936e65d7da66392603c2f91f6f",
                 "expected_bias.gz:md5,3407f87245d0003e0ffbfdf6d8c04f20",
                 "observed_bias.gz:md5,92bcd0592d22a6a58d0360fc76103e56",
@@ -1417,10 +1427,10 @@
                 "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
             ]
         ],
-        "timestamp": "2026-04-22T17:29:06.762359837",
+        "timestamp": "2026-05-01T16:35:07.253028432",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     },
     "Params: --pseudo_aligner salmon --skip_qc --skip_alignment": {
@@ -1727,6 +1737,7 @@
                 "salmon/salmon.merged.transcript_lengths.tsv",
                 "salmon/salmon.merged.transcript_tpm.tsv",
                 "salmon/salmon.merged.tx2gene.tsv",
+                "salmon/salmon.merged.tx2gene_augmented.tsv",
                 "trimgalore",
                 "trimgalore/RAP1_IAA_30M_REP1_trimmed_1.fastq.gz_trimming_report.txt",
                 "trimgalore/RAP1_IAA_30M_REP1_trimmed_2.fastq.gz_trimming_report.txt",
@@ -1784,13 +1795,14 @@
                 "observed_bias_3p.gz:md5,92bcd0592d22a6a58d0360fc76103e56",
                 "cmd_info.json:md5,fe66c9d876645b9260d8c2488157d4d4",
                 "lib_format_counts.json:md5,088fd51db07022ffde47033bbd029400",
-                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
+                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
             ]
         ],
-        "timestamp": "2026-04-22T17:27:10.699537381",
+        "timestamp": "2026-05-01T16:32:31.259400281",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     },
     "Params: --pseudo_aligner salmon --skip_alignment --skip_quantification_merge - stub": {
