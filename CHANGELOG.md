@@ -9,10 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhancements and fixes
 
+- [PR #1789](https://github.com/nf-core/rnaseq/pull/1789) - Bump `trimgalore` module to 2.1.0 ([nf-core/modules#11524](https://github.com/nf-core/modules/pull/11524)); add ARM Wave container for the new pin in `conf/arm.config`
 - [PR #1821](https://github.com/nf-core/rnaseq/pull/1821) - Bump version to 3.26.0dev after release 3.25.0; flip the MultiQC report links and RO-Crate URL/version back to dev
 - [PR #1823](https://github.com/nf-core/rnaseq/pull/1823) - Reinstall `trimgalore` module to pull in [nf-core/modules#11308](https://github.com/nf-core/modules/pull/11308), which removes orphan `*_trimmed.fq.gz` outputs left in the workdir by an interrupted previous trim_galore attempt (e.g. AWS Batch retry after a Spot reclaim) that were breaking `FQ_LINT_AFTER_TRIMMING` ([#1807](https://github.com/nf-core/rnaseq/issues/1807))
+- [PR #1827](https://github.com/nf-core/rnaseq/pull/1827) - Merge nf-core template v4.0.2
 - [PR #1829](https://github.com/nf-core/rnaseq/pull/1829) - Disambiguate the three FastQC instances (raw / trimmed / filtered) in MultiQC General Statistics by suffixing each instance's column titles with `(raw)`, `(trim)` and `(filt)` ([#1828](https://github.com/nf-core/rnaseq/issues/1828))
-- Publish `*.merged.tx2gene_augmented.tsv` alongside the GTF-derived `*.merged.tx2gene.tsv`; this is the table actually consumed by `tximport` (input mappings plus self-mappings for orphan transcripts) and is required to reproduce the published gene-level outputs from the per-sample quantification files ([#1830](https://github.com/nf-core/rnaseq/issues/1830))
+- [PR #1831](https://github.com/nf-core/rnaseq/pull/1831) - Publish `*.merged.tx2gene_augmented.tsv` alongside the GTF-derived `*.merged.tx2gene.tsv`; this is the table actually consumed by `tximport` (input mappings plus self-mappings for orphan transcripts) and is required to reproduce the published gene-level outputs from the per-sample quantification files ([#1830](https://github.com/nf-core/rnaseq/issues/1830))
+- [PR #1832](https://github.com/nf-core/rnaseq/pull/1832) - Suppress non-comparable `*gene_counts_length_scaled.tsv` outputs in `--skip_quantification_merge` mode ([#1822](https://github.com/nf-core/rnaseq/issues/1822))
 
 ## [[3.25.0](https://github.com/nf-core/rnaseq/releases/tag/3.25.0)] - 2026-04-24
 

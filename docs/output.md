@@ -1016,12 +1016,11 @@ When `--skip_quantification_merge` is enabled, the merged cross-sample files abo
   - `<SAMPLE>.gene_tpm.tsv`: Gene-level TPM values for this sample.
   - `<SAMPLE>.gene_lengths.tsv`: Average transcript lengths per gene for this sample.
   - `<SAMPLE>.gene_counts_scaled.tsv`: Library size-scaled gene counts for this sample.
-  - `<SAMPLE>.gene_counts_length_scaled.tsv`: Length-scaled gene counts for this sample.
   - `<SAMPLE>.transcript_counts.tsv`: Transcript-level raw counts for this sample.
   - `<SAMPLE>.transcript_tpm.tsv`: Transcript-level TPM values for this sample.
   - `<SAMPLE>.tx2gene_augmented.tsv`: The tx2gene table actually used by `tximport` for this sample (input mappings plus self-mappings for any orphan transcripts). Use this file (not the GTF-derived `<pseudo_aligner>.merged.tx2gene.tsv` published at the workflow level) to reproduce this sample's gene-level outputs from its `quant.sf` / `abundance.tsv`.
 
-SummarizedExperiment RDS objects and DESeq2 QC outputs are skipped in this mode. See the [usage documentation](https://nf-co.re/rnaseq/usage#per-sample-quantification---skip_quantification_merge) for details.
+`*gene_counts_length_scaled.tsv` is not produced in this mode (see [#1822](https://github.com/nf-core/rnaseq/issues/1822)). SummarizedExperiment RDS objects and DESeq2 QC outputs are skipped in this mode. See the [usage documentation](https://nf-co.re/rnaseq/usage#per-sample-quantification---skip_quantification_merge) for details.
 
 :::tip
 You can access specific assay matrices from the `SummarizedExperiment` RDS object with the following R code:
