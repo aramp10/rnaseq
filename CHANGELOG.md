@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [PR #1827](https://github.com/nf-core/rnaseq/pull/1827) - Merge nf-core template v4.0.2
 - [PR #1829](https://github.com/nf-core/rnaseq/pull/1829) - Disambiguate the three FastQC instances (raw / trimmed / filtered) in MultiQC General Statistics by suffixing each instance's column titles with `(raw)`, `(trim)` and `(filt)` ([#1828](https://github.com/nf-core/rnaseq/issues/1828))
 - [PR #1832](https://github.com/nf-core/rnaseq/pull/1832) - Suppress non-comparable `*gene_counts_length_scaled.tsv` outputs in `--skip_quantification_merge` mode ([#1822](https://github.com/nf-core/rnaseq/issues/1822))
+- [PR #XXXX](https://github.com/nf-core/rnaseq/pull/XXXX) - Gate the legacy STAR 2.6.1d alignment pin on a per-entry `star_legacy` flag in the genomes map and an unmodified `--star_index`, so custom catalogues with modern indices are no longer routed through the iGenomes-pinned STAR; rename the iGenomes-named scaffolding (`STAR_ALIGN_IGENOMES`, `use_igenomes_star`, `conf/igenomes_star.config`) to `legacy`-prefixed equivalents
 
 ## [[3.25.0](https://github.com/nf-core/rnaseq/releases/tag/3.25.0)] - 2026-04-24
 

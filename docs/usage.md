@@ -730,7 +730,30 @@ However this is no longer recommended because:
 
 Notes:
 
-- As of v3.7 of the pipeline, if you are using a genome downloaded from AWS iGenomes and using `--aligner star_salmon` (default) the version of STAR to use for the alignment will be auto-detected (see [#808](https://github.com/nf-core/rnaseq/issues/808)).
+- The pre-built STAR indices shipped with iGenomes were generated with STAR 2.6.1d, which is incompatible with the modern STAR (2.7.x) bundled in the pipeline. Each iGenomes entry sets `star_legacy = true`, and when alignment uses an iGenomes-resolved STAR index the pipeline pins STAR 2.6.1d for that run only. Supplying your own `--star_index` overrides this, and the modern STAR is used.
+
+### Custom genome catalogues
+
+The `--genome` mechanism is not iGenomes-specific. You can define your own catalogue in a config file using the same `params.genomes` map shape, then select an entry with `--genome <key>`:
+
+```groovy
+params {
+    genomes {
+        'my_grch38_2025' {
+            fasta            = '/refs/grch38/genome.fa'
+            gtf              = '/refs/grch38/genes.gtf'
+            transcript_fasta = '/refs/grch38/transcripts.fa'
+            gene_bed         = '/refs/grch38/genes.bed'
+            star             = '/refs/grch38/star_2.7.11b/'
+            salmon           = '/refs/grch38/salmon/'
+        }
+    }
+}
+```
+
+Run with `-c my_genomes.config --genome my_grch38_2025`. Any individual reference can still be overridden on the command line (e.g. `--star_index`).
+
+Set `star_legacy = true` on an entry only if its `star` index was built with STAR 2.6.x (for example, an internal mirror of AWS iGenomes content). For modern indices, leave the flag absent. The legacy pin engages only when both conditions hold: the active entry has `star_legacy = true`, and the user has not overridden `--star_index`.
 
 ### GTF filtering
 
