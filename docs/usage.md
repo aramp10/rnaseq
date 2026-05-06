@@ -725,9 +725,9 @@ For more information, see the upstream issues:
 
 #### iGenomes (not recommended)
 
-The pipeline ships the AWS iGenomes catalogue as the default `params.genomes` content. With nothing else configured, `--genome GRCh37` (or any other iGenomes key) resolves to entries from this default catalogue, with paths pointing at AWS iGenomes (or the location specified by `--igenomes_base` if you've mirrored the catalogue locally). Each entry in the bundled catalogue that ships a pre-built STAR index is flagged with `star_legacy = true`, which pins STAR alignment to 2.6.1d for compatibility with those indices (the AWS iGenomes STAR indices were built before STAR 2.7's index format changes).
+The pipeline ships the AWS iGenomes catalogue as the default `params.genomes` content. With nothing else configured, `--genome GRCh37` (or any other iGenomes key) resolves to entries from this default catalogue, with paths pointing at AWS iGenomes (or the location specified by `--igenomes_base` if you've mirrored the catalogue locally). Each entry in the bundled catalogue that ships a pre-built STAR index is flagged with `star_legacy = true`, which routes the index through `STAR_GENOMEPARAMS_UPGRADE` before alignment - a small adapter that rewrites STAR 2.6.x `genomeParameters.txt` (`versionGenome 20201`, no `genomeType` / `genomeTransformType` / `genomeTransformVCF`) into the 2.7.4a metadata schema and symlinks the binary index files unchanged. Alignment itself always uses the modern STAR build the pipeline ships (currently 2.7.11b); there is no longer a separate STAR 2.6.x container.
 
-If you override the resolved index by supplying your own `--star_index`, the pin is bypassed and the pipeline aligns with the modern STAR version it ships (currently 2.7.11b). The pipeline assumes the supplied index is compatible with that version, so it should have been built with the same version or a sufficiently close release. An older index (e.g. one built with STAR 2.6.x) will fail to load with `unrecoginzed parameter name "genomeType"` (or similar). The fix is to rebuild the index against modern STAR, or to drop `--star_index` and let the resolved (legacy-pinned) iGenomes index handle alignment.
+If you override the resolved index by supplying your own `--star_index`, the `star_legacy` gate is bypassed and the supplied index is passed straight to STAR. The pipeline assumes the supplied index is compatible with the modern STAR build.
 
 The bundled iGenomes catalogue is provided for legacy compatibility but is **not recommended for new analyses**, because:
 
@@ -759,7 +759,7 @@ Run with `-c my_genomes.config --genome my_grch38_2025`. Any individual referenc
 
 The map keys are the bare names used internally (`star`, `salmon`, `bed12`, `bowtie2`, `hisat2`, `kallisto`, `rsem`, `bbsplit`, `sortmerna`, `transcript_fasta`, `additional_fasta`, `gff`, `gtf`, `fasta`); the pipeline maps these onto the corresponding `--<name>_index` parameters where appropriate.
 
-Set `star_legacy = true` on an entry **only** if its `star` index was built with STAR 2.6.x (for example, an internal mirror of AWS iGenomes content). For indices built with modern STAR, leave the flag absent. The legacy pin engages only when both conditions hold: the active entry has `star_legacy = true`, and the user has not overridden `--star_index`.
+Set `star_legacy = true` on an entry **only** if its `star` index was built with STAR 2.6.x (for example, an internal mirror of AWS iGenomes content). For indices built with modern STAR, leave the flag absent. The flag triggers `STAR_GENOMEPARAMS_UPGRADE`, which rewrites the legacy `genomeParameters.txt` metadata into the 2.7.4a schema before the index reaches `STAR_ALIGN`. The gate engages only when both conditions hold: the active entry has `star_legacy = true`, and the user has not overridden `--star_index`.
 
 ### GTF filtering
 
