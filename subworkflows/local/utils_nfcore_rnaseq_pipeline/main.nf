@@ -666,6 +666,23 @@ def additionaFastaIndexWarn(index) {
 }
 
 //
+// Decide whether the supplied STAR index needs to be routed through the
+// STAR_GENOMEPARAMS_UPGRADE adapter. Fires when the active genomes-map entry
+// has `star_legacy = true` (set on every iGenomes entry that ships a
+// `star` directory), the user has not overridden the resolved index with
+// their own --star_index, and alignment is going through stock STAR (the
+// Sentieon and Parabricks branches bundle older STAR builds that already
+// accept versionGenome 20201).
+//
+def isStarIndexLegacy() {
+    def genome_entry = params.genomes && params.genome ? params.genomes[params.genome] : null
+    return  genome_entry?.star_legacy &&
+            params.star_index == genome_entry.star &&
+            !params.use_sentieon_star &&
+            !params.use_parabricks_star
+}
+
+//
 // Function to generate an error if contigs in genome fasta file > 512 Mbp
 //
 def checkMaxContigSize(fai_file) {
