@@ -54,12 +54,12 @@
             "properties": {
                 "genome": {
                     "type": "string",
-                    "description": "Name of iGenomes reference.",
+                    "description": "Name of a `params.genomes` catalogue entry (iGenomes or a user-defined catalogue).",
                     "fa_icon": "fas fa-book",
                     "minLength": 1,
                     "pattern": "^[a-zA-Z0-9_\\-\\.]+$",
                     "errorMessage": "The genome name must not contain spaces and must be a valid identifier.",
-                    "help_text": "If using a reference genome configured with iGenomes (not recommended), provide the ID for the reference (e.g., `--genome GRCh38`). This builds paths for all required reference files. See the [nf-core documentation](https://nf-co.re/usage/reference_genomes) for details."
+                    "help_text": "Selects a reference bundle from the `params.genomes` map and populates `fasta`, `gtf`, index paths, etc. from it. The pipeline ships the AWS iGenomes catalogue by default (entries like `--genome GRCh38`), but iGenomes annotations are vastly out of date and not recommended for new analyses. For modern reference data, supply `--fasta`/`--gtf` directly or define your own catalogue with the same `params.genomes` shape and load it via `-c`. See the [usage documentation](https://nf-co.re/rnaseq/usage#reference-catalogues-via---genome) for details."
                 },
                 "fasta": {
                     "type": "string",
