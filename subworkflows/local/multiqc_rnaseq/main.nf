@@ -384,7 +384,10 @@ def strandSummaryCells(meta, provided, status, salmon, rseqc) {
 //
 def strandCheckSummaryYaml(static_config, rows) {
     def header_keys = static_config.headers.keySet()
-    def data = rows.collectEntries { row ->
+    // Sort by sample id so the merged output is deterministic regardless of
+    // which sample finished RSeQC/Salmon first, and so the rendered MultiQC
+    // table has a consistent default row order.
+    def data = rows.toSorted { it[0].id }.collectEntries { row ->
         def (meta, provided, status, salmon, rseqc) = row
         def raw = strandSummaryCells(meta, provided, status, salmon, rseqc)
         def unknown = raw.keySet() - header_keys
@@ -421,7 +424,10 @@ def strandCompositionMap(analysis) {
 def strandCheckCompositionYaml(static_config, rows) {
     def rseqc_data  = [:]
     def salmon_data = [:]
-    rows.each { row ->
+    // Sort by sample id so the merged output is deterministic regardless of
+    // which sample finished RSeQC/Salmon first, and so the rendered MultiQC
+    // bargraph has a consistent default sample order.
+    rows.toSorted { it[0].id }.each { row ->
         def (meta, _p, _s, salmon, rseqc) = row
         if (rseqc)  rseqc_data[meta.id]  = strandCompositionMap(rseqc)
         if (salmon) salmon_data[meta.id] = strandCompositionMap(salmon)
