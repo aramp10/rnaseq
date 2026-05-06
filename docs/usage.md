@@ -725,16 +725,16 @@ For more information, see the upstream issues:
 
 #### iGenomes (not recommended)
 
-If `--genome` resolves to an iGenomes entry (e.g. `--genome GRCh37`), the FASTA, GTF, and pre-built indices are obtained from AWS iGenomes unless mirrored locally via `--igenomes_base`. iGenomes entries that ship a pre-built STAR index are flagged with `star_legacy = true`, which pins STAR alignment to 2.6.1d for compatibility with those indices (built before STAR 2.7's index format changes).
+The pipeline ships the AWS iGenomes catalogue as the default `params.genomes` content. With nothing else configured, `--genome GRCh37` (or any other iGenomes key) resolves to entries from this default catalogue, with paths pointing at AWS iGenomes (or the location specified by `--igenomes_base` if you've mirrored the catalogue locally). Each entry in the bundled catalogue that ships a pre-built STAR index is flagged with `star_legacy = true`, which pins STAR alignment to 2.6.1d for compatibility with those indices (the AWS iGenomes STAR indices were built before STAR 2.7's index format changes).
 
 If you override the resolved index by supplying your own `--star_index`, the pin is bypassed and the pipeline aligns with the modern STAR version it ships (currently 2.7.11b). The pipeline assumes the supplied index is compatible with that version, so it should have been built with the same version or a sufficiently close release. An older index (e.g. one built with STAR 2.6.x) will fail to load with `unrecoginzed parameter name "genomeType"` (or similar). The fix is to rebuild the index against modern STAR, or to drop `--star_index` and let the resolved (legacy-pinned) iGenomes index handle alignment.
 
-iGenomes is provided for legacy compatibility but is **not recommended for new analyses**, because:
+The bundled iGenomes catalogue is provided for legacy compatibility but is **not recommended for new analyses**, because:
 
 - Gene annotations in iGenomes are extremely out of date. This can be particularly problematic for RNA-seq analysis, which relies on accurate gene annotation.
 - Some iGenomes references (e.g., GRCh38) point to annotation files that use gene symbols as the primary identifier. This can cause issues for downstream analysis, such as the nf-core [differential abundance](https://nf-co.re/differentialabundance) workflow where a conventional gene identifier distinct from symbol is expected.
 
-For new analyses, supply `--fasta`/`--gtf` directly (see [Explicit reference file specification](#explicit-reference-file-specification-recommended) above), or define your own catalogue using the same `params.genomes` shape (see below).
+For new analyses, supply `--fasta`/`--gtf` directly (see [Explicit reference file specification](#explicit-reference-file-specification-recommended) above), or define your own catalogue using the same `params.genomes` shape (see below). A user-supplied catalogue can use whatever keys you want, including iGenomes-style names like `GRCh37` to shadow the default entries with current reference data.
 
 #### Custom catalogues
 
