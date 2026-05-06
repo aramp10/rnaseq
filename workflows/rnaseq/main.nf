@@ -262,15 +262,17 @@ workflow RNASEQ {
     ch_star_log            = channel.empty()
 
     if (!params.skip_alignment && (params.aligner == 'star_salmon' || params.aligner == 'star_rsem')) {
-        // Use iGenomes-pinned STAR (2.6.1d) only when aligning with a pre-built iGenomes index
-        def use_igenomes_star = params.genome && params.star_index ? true : false
+        // Pin legacy STAR (2.6.1d) when the genomes-map entry opts in via star_legacy
+        // and the user has not overridden --star_index with a custom build.
+        def genome_entry    = params.genomes && params.genome ? params.genomes[params.genome] : null
+        def use_legacy_star = genome_entry?.star_legacy && params.star_index == genome_entry.star
 
         ALIGN_STAR (
             ch_strand_inferred_filtered_fastq,
             ch_star_index.map { item -> [ [:], item ] },
             ch_gtf.map { item -> [ [:], item ] },
             params.star_ignore_sjdbgtf,
-            use_igenomes_star,
+            use_legacy_star,
             ch_fasta_fai,
             params.use_sentieon_star,
             params.use_parabricks_star,

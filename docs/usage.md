@@ -719,18 +719,47 @@ For more information, see the upstream issues:
 - [nf-core/rnaseq#608](https://github.com/nf-core/rnaseq/issues/608)
 - [bxlab/bx-python#67](https://github.com/bxlab/bx-python/issues/67)
 
-### iGenomes (not recommended)
+### Reference catalogues via `--genome`
 
-If the `--genome` parameter is provided (e.g. `--genome GRCh37`) then the FASTA and GTF files (and existing indices) will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
+`--genome <key>` selects a bundle of reference paths from the `params.genomes` map and uses them in place of supplying `--fasta`/`--gtf`/etc. individually. The map is a generic catalogue mechanism: the pipeline ships the AWS iGenomes catalogue by default, but you can also author your own. iGenomes is the legacy use case; a user-maintained catalogue is the recommended way to get `--genome` ergonomics on modern reference data.
 
-However this is no longer recommended because:
+#### iGenomes (not recommended)
+
+The pipeline ships the AWS iGenomes catalogue as the default `params.genomes` content. With nothing else configured, `--genome GRCh37` (or any other iGenomes key) resolves to entries from this default catalogue, with paths pointing at AWS iGenomes (or the location specified by `--igenomes_base` if you've mirrored the catalogue locally). Each entry in the bundled catalogue that ships a pre-built STAR index is flagged with `star_legacy = true`, which pins STAR alignment to 2.6.1d for compatibility with those indices (the AWS iGenomes STAR indices were built before STAR 2.7's index format changes).
+
+If you override the resolved index by supplying your own `--star_index`, the pin is bypassed and the pipeline aligns with the modern STAR version it ships (currently 2.7.11b). The pipeline assumes the supplied index is compatible with that version, so it should have been built with the same version or a sufficiently close release. An older index (e.g. one built with STAR 2.6.x) will fail to load with `unrecoginzed parameter name "genomeType"` (or similar). The fix is to rebuild the index against modern STAR, or to drop `--star_index` and let the resolved (legacy-pinned) iGenomes index handle alignment.
+
+The bundled iGenomes catalogue is provided for legacy compatibility but is **not recommended for new analyses**, because:
 
 - Gene annotations in iGenomes are extremely out of date. This can be particularly problematic for RNA-seq analysis, which relies on accurate gene annotation.
 - Some iGenomes references (e.g., GRCh38) point to annotation files that use gene symbols as the primary identifier. This can cause issues for downstream analysis, such as the nf-core [differential abundance](https://nf-co.re/differentialabundance) workflow where a conventional gene identifier distinct from symbol is expected.
 
-Notes:
+For new analyses, supply `--fasta`/`--gtf` directly (see [Explicit reference file specification](#explicit-reference-file-specification-recommended) above), or define your own catalogue using the same `params.genomes` shape (see below). A user-supplied catalogue can use whatever keys you want, including iGenomes-style names like `GRCh37` to shadow the default entries with current reference data.
 
-- As of v3.7 of the pipeline, if you are using a genome downloaded from AWS iGenomes and using `--aligner star_salmon` (default) the version of STAR to use for the alignment will be auto-detected (see [#808](https://github.com/nf-core/rnaseq/issues/808)).
+#### Custom catalogues
+
+The `params.genomes` map is not iGenomes-specific. If you re-run the pipeline against a stable reference set, defining your own catalogue avoids the iGenomes downsides (stale annotations, version-locked STAR indices) while keeping the convenience of a single `--genome <key>` flag. Author a config file using the same map shape:
+
+```groovy
+params {
+    genomes {
+        'my_grch38_2025' {
+            fasta            = '/refs/grch38/genome.fa'
+            gtf              = '/refs/grch38/genes.gtf'
+            transcript_fasta = '/refs/grch38/transcripts.fa'
+            bed12            = '/refs/grch38/genes.bed'
+            star             = '/refs/grch38/star_2.7.11b/'
+            salmon           = '/refs/grch38/salmon/'
+        }
+    }
+}
+```
+
+Run with `-c my_genomes.config --genome my_grch38_2025`. Any individual reference can still be overridden on the command line (e.g. `--star_index /alternate/path`).
+
+The map keys are the bare names used internally (`star`, `salmon`, `bed12`, `bowtie2`, `hisat2`, `kallisto`, `rsem`, `bbsplit`, `sortmerna`, `transcript_fasta`, `additional_fasta`, `gff`, `gtf`, `fasta`); the pipeline maps these onto the corresponding `--<name>_index` parameters where appropriate.
+
+Set `star_legacy = true` on an entry **only** if its `star` index was built with STAR 2.6.x (for example, an internal mirror of AWS iGenomes content). For indices built with modern STAR, leave the flag absent. The legacy pin engages only when both conditions hold: the active entry has `star_legacy = true`, and the user has not overridden `--star_index`.
 
 ### GTF filtering
 
@@ -778,7 +807,7 @@ nextflow run \
 This is not usually recommended with Salmon unless you also supply a previously generated decoy-aware Salmon transcriptome index.
 
 :::note
-Loading iGenomes configuration remains the default for reasons of consistency with other workflows, but should be disabled when not using iGenomes, applying the recommended usage above.
+The pipeline auto-loads the iGenomes catalogue config by default for consistency with other nf-core workflows. If you are not using iGenomes (e.g., supplying `--fasta`/`--gtf` directly or selecting a custom catalogue entry via `--genome`), set `--igenomes_ignore` to skip loading the bundled iGenomes map.
 :::
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
