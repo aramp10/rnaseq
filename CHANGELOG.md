@@ -3,22 +3,40 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## dev - xxxx-xx-xx
+## [[3.26.0](https://github.com/nf-core/rnaseq/releases/tag/3.26.0)] - 2026-05-07
 
 ### Credits
+
+Special thanks to the following for their contributions to the release:
+
+- [Daniel Lundin](https://github.com/erikrikarddaniel)
+- [Edmund Miller](https://github.com/edmundmiller)
+- [Felix Krueger](https://github.com/FelixKrueger)
+- [Friederike Hanssen](https://github.com/FriederikeHanssen)
+- [James A. Fellows Yates](https://github.com/jfy133)
+- [Long Pan](https://github.com/LongpanICR)
+- [Luisa Santus](https://github.com/luisas)
+- [Matthias Hörtenhuber](https://github.com/mashehu)
+- [Maxime U Garcia](https://github.com/maxulysse)
+- [Phil Ewels](https://github.com/ewels)
+- [Simon Pearce](https://github.com/SPPearce)
+- [Thomas Danhorn](https://github.com/tdanhorn)
 
 ### Enhancements and fixes
 
 - [PR #1789](https://github.com/nf-core/rnaseq/pull/1789) - Bump `trimgalore` module to 2.1.0 ([nf-core/modules#11524](https://github.com/nf-core/modules/pull/11524)); add ARM Wave container for the new pin in `conf/arm.config`
 - [PR #1821](https://github.com/nf-core/rnaseq/pull/1821) - Bump version to 3.26.0dev after release 3.25.0; flip the MultiQC report links and RO-Crate URL/version back to dev
 - [PR #1823](https://github.com/nf-core/rnaseq/pull/1823) - Reinstall `trimgalore` module to pull in [nf-core/modules#11308](https://github.com/nf-core/modules/pull/11308), which removes orphan `*_trimmed.fq.gz` outputs left in the workdir by an interrupted previous trim_galore attempt (e.g. AWS Batch retry after a Spot reclaim) that were breaking `FQ_LINT_AFTER_TRIMMING` ([#1807](https://github.com/nf-core/rnaseq/issues/1807))
+- [PR #1824](https://github.com/nf-core/rnaseq/pull/1824) - Restore the #1821 entry to the changelog after it was dropped during 3.25.1 prep
+- [PR #1826](https://github.com/nf-core/rnaseq/pull/1826) - Auto-merged template update for nf-core/tools v4.0.0, superseded by the v4.0.2 merge in #1827
 - [PR #1827](https://github.com/nf-core/rnaseq/pull/1827) - Merge nf-core template v4.0.2
 - [PR #1829](https://github.com/nf-core/rnaseq/pull/1829) - Disambiguate the three FastQC instances (raw / trimmed / filtered) in MultiQC General Statistics by suffixing each instance's column titles with `(raw)`, `(trim)` and `(filt)` ([#1828](https://github.com/nf-core/rnaseq/issues/1828))
 - [PR #1831](https://github.com/nf-core/rnaseq/pull/1831) - Publish `*.merged.tx2gene_augmented.tsv` alongside the GTF-derived `*.merged.tx2gene.tsv`; this is the table actually consumed by `tximport` (input mappings plus self-mappings for orphan transcripts) and is required to reproduce the published gene-level outputs from the per-sample quantification files ([#1830](https://github.com/nf-core/rnaseq/issues/1830))
 - [PR #1832](https://github.com/nf-core/rnaseq/pull/1832) - Suppress non-comparable `*gene_counts_length_scaled.tsv` outputs in `--skip_quantification_merge` mode ([#1822](https://github.com/nf-core/rnaseq/issues/1822))
-- [PR #1834](https://github.com/nf-core/rnaseq/pull/1834) - Gate the legacy STAR 2.6.1d alignment pin on a per-entry `star_legacy` flag in the genomes map and an unmodified `--star_index`, so custom catalogues with modern indices are no longer routed through the iGenomes-pinned STAR; rename the iGenomes-named scaffolding (`STAR_ALIGN_IGENOMES`, `use_igenomes_star`, `conf/igenomes_star.config`) to `legacy`-prefixed equivalents; sort the merged Strandedness checks MultiQC tables by sample id so the JSON serialisation (and hence file md5) is deterministic regardless of which sample finished RSeQC/Salmon first
+- [PR #1834](https://github.com/nf-core/rnaseq/pull/1834) - Gate the legacy STAR 2.6.1d pin on a per-entry `star_legacy` flag so custom catalogues with modern indices skip it; rename the iGenomes-named scaffolding (`STAR_ALIGN_IGENOMES`, `use_igenomes_star`, `conf/igenomes_star.config`) to `legacy`-prefixed equivalents; sort the merged Strandedness checks MultiQC tables by sample id for deterministic md5
+- [PR #1835](https://github.com/nf-core/rnaseq/pull/1835) - Drop the STAR 2.6.1d alignment pin in favour of a metadata-only upgrade adapter. Genome-map entries flagged `star_legacy = true` route through a new `STAR_GENOMEPARAMS_UPGRADE` process that rewrites the legacy `genomeParameters.txt` to the 2.7.4a schema, so stock STAR runs the modern build the pipeline ships; Sentieon and Parabricks STAR branches bypass the upgrade. Removes `STAR_ALIGN_LEGACY`, the parallel STAR 2.6.1d Wave/conda containers, `conf/legacy_star.config`, and the ARM-specific 2.6.1d override
 - [PR #1836](https://github.com/nf-core/rnaseq/pull/1836) - Reinstall `trimgalore` module to pick up upstream label change (`process_high` → `process_medium` + `process_low_memory`); add the matching `process_low_memory` definition (1 GB) to `conf/base.config` per the nf-core/tools template
-- [PR #1835](https://github.com/nf-core/rnaseq/pull/1835) - Drop the STAR 2.6.1d alignment pin in favour of a metadata-only upgrade adapter. Genome-map entries flagged `star_legacy = true` now route through a new `STAR_GENOMEPARAMS_UPGRADE` process that rewrites the legacy `genomeParameters.txt` (`versionGenome 20201`, no `genomeType`/`genomeTransformType`/`genomeTransformVCF`) into the 2.7.4a schema and symlinks the binary index files unchanged, so stock STAR alignment can run with the modern build the pipeline ships. The Sentieon and Parabricks STAR branches bypass the upgrade because their bundled STAR builds predate 2.7.4a and accept `versionGenome 20201` directly. Removes `STAR_ALIGN_LEGACY`, the parallel STAR 2.6.1d Wave/conda containers, `conf/legacy_star.config`, and the ARM-specific 2.6.1d override
+- [PR #1837](https://github.com/nf-core/rnaseq/pull/1837) - Bump version to 3.26.0 ahead of release
 
 ## [[3.25.0](https://github.com/nf-core/rnaseq/releases/tag/3.25.0)] - 2026-04-24
 
