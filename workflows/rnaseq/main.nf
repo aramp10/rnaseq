@@ -613,7 +613,7 @@ workflow RNASEQ {
                 ch_gtf.map { gtf -> [ [:], gtf ] },
                 ch_gene_bed,
                 ch_fasta_fai,
-                Channel.value([ [:], ch_biotypes_header_multiqc ]),
+                channel.value([ [:], ch_biotypes_header_multiqc ]),
                 qc_tools,
                 biotype
             )
