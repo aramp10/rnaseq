@@ -296,7 +296,8 @@ When BBSplit and/or rRNA removal is enabled, an additional [FastQC](http://www.b
   - `salmon.merged.gene_counts_length_scaled.tsv`: Matrix of gene-level length-scaled estimated counts across all samples.
   - `salmon.merged.transcript_counts.tsv`: Matrix of isoform-level raw counts across all samples.
   - `salmon.merged.transcript_tpm.tsv`: Matrix of isoform-level TPM values across all samples.
-  - `tx2gene.tsv`: Tab-delimited file containing gene to transcripts ids mappings.
+  - `salmon.merged.tx2gene.tsv`: Transcript-to-gene mapping derived from the input GTF.
+  - `salmon.merged.tx2gene_augmented.tsv`: The tx2gene table actually used by `tximport`. Equal to `salmon.merged.tx2gene.tsv` plus self-mappings for any transcripts present in the per-sample `quant.sf` but missing from the GTF-derived mapping. Use this file to reproduce the published gene-level outputs from the per-sample `quant.sf` files - feeding the GTF-derived tx2gene to `tximport()` directly drops orphan transcripts and shifts the per-sample library-size totals that feed into `countsFromAbundance` scaling.
   - `salmon.merged.transcript.SummarizedExperiment.rds`: RDS object that can be loaded in R that contains a [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) container with the abundance TPM (`tpm`), estimated isoform-level raw counts (`counts`) and transcript length (`length`) in the assays slot for transcripts.
 - `star_salmon/<SAMPLE>/`
   - `quant.sf`: Salmon transcript-level quantification results.
@@ -352,6 +353,7 @@ The STAR section of the MultiQC report shows a bar plot with alignment rates: go
   - `rsem.merged.transcript_lengths.tsv`: Matrix of transcript-level effective lengths across all samples.
   - `rsem.merged.transcript_tpm.tsv`: Matrix of transcript-level TPM values across all samples.
   - `rsem.merged.tx2gene.tsv`: Transcript-to-gene mapping file generated from the GTF.
+  - `rsem.merged.tx2gene_augmented.tsv`: The tx2gene table actually used by `tximport`. Equal to `rsem.merged.tx2gene.tsv` plus self-mappings for any transcripts present in the per-sample `*.isoforms.results` but missing from the GTF-derived mapping. Use this file to reproduce the published gene-level outputs.
   - `rsem.merged.gene.SummarizedExperiment.rds`: RDS object that can be loaded in R that contains a [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) container with the abundance TPM (`tpm`), estimated counts (`counts`) and gene length (`lengths`), estimated library size-scaled counts (`counts_scaled`), estimated length-scaled counts (`counts_length_scaled`) in the assays slot for genes.
   - `rsem.merged.transcript.SummarizedExperiment.rds`: RDS object that can be loaded in R that contains a [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) container with the abundance TPM (`tpm`), estimated isoform-level raw counts (`counts`) and transcript length (`lengths`) in the assays slot for transcripts.
 - `star_rsem/rsem_merge_counts/` - legacy RSEM merge script outputs:
@@ -406,7 +408,8 @@ You can choose to align and quantify your data with RSEM by providing the `--ali
   - `salmon.merged.transcript_counts.tsv`: Matrix of isoform-level raw counts across all samples.
   - `salmon.merged.transcript_tpm.tsv`: Matrix of isoform-level TPM values across all samples.
   - `salmon.merged.transcript.SummarizedExperiment.rds`: RDS object containing a [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) with transcript-level abundance data.
-  - `tx2gene.tsv`: Tab-delimited file containing gene to transcript ID mappings.
+  - `salmon.merged.tx2gene.tsv`: Transcript-to-gene mapping derived from the input GTF (or GFF).
+  - `salmon.merged.tx2gene_augmented.tsv`: The tx2gene table actually used by `tximport`. Equal to `salmon.merged.tx2gene.tsv` plus self-mappings for any transcripts present in the per-sample `quant.sf` but missing from the GTF-derived mapping. Use this file to reproduce the published gene-level outputs.
 - `bowtie2_salmon/<SAMPLE>/`
   - `quant.sf`: Salmon transcript-level quantification results.
   - `quant.genes.sf`: Salmon gene-level quantification results.
@@ -1002,7 +1005,8 @@ The principal output files are the same between Salmon and Kallisto:
   - `<pseudo_aligner>.merged.gene_counts_length_scaled.tsv`: Matrix of gene-level length-scaled estimated counts across all samples.
   - `<pseudo_aligner>.merged.transcript_counts.tsv`: Matrix of isoform-level raw counts across all samples.
   - `<pseudo_aligner>.merged.transcript_tpm.tsv`: Matrix of isoform-level TPM values across all samples.
-  - `tx2gene.tsv`: Tab-delimited file containing gene to transcripts ids mappings.
+  - `<pseudo_aligner>.merged.tx2gene.tsv`: Transcript-to-gene mapping derived from the input GTF.
+  - `<pseudo_aligner>.merged.tx2gene_augmented.tsv`: The tx2gene table actually used by `tximport`. Equal to `<pseudo_aligner>.merged.tx2gene.tsv` plus self-mappings for any transcripts present in the per-sample quantification output but missing from the GTF-derived mapping. Use this file to reproduce the published gene-level outputs.
   - `<pseudo_aligner>.merged.transcript.SummarizedExperiment.rds`: RDS object that can be loaded in R that contains a [SummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) container with the abundance TPM (`tpm`), estimated isoform-level raw counts (`counts`) and transcript length (`length`) in the assays slot for transcripts.
 
 When `--skip_quantification_merge` is enabled, the merged cross-sample files above are **not** produced. Instead, tximport runs per-sample and outputs are nested under each sample's directory:
@@ -1012,11 +1016,11 @@ When `--skip_quantification_merge` is enabled, the merged cross-sample files abo
   - `<SAMPLE>.gene_tpm.tsv`: Gene-level TPM values for this sample.
   - `<SAMPLE>.gene_lengths.tsv`: Average transcript lengths per gene for this sample.
   - `<SAMPLE>.gene_counts_scaled.tsv`: Library size-scaled gene counts for this sample.
-  - `<SAMPLE>.gene_counts_length_scaled.tsv`: Length-scaled gene counts for this sample.
   - `<SAMPLE>.transcript_counts.tsv`: Transcript-level raw counts for this sample.
   - `<SAMPLE>.transcript_tpm.tsv`: Transcript-level TPM values for this sample.
+  - `<SAMPLE>.tx2gene_augmented.tsv`: The tx2gene table actually used by `tximport` for this sample (input mappings plus self-mappings for any orphan transcripts). Use this file (not the GTF-derived `<pseudo_aligner>.merged.tx2gene.tsv` published at the workflow level) to reproduce this sample's gene-level outputs from its `quant.sf` / `abundance.tsv`.
 
-SummarizedExperiment RDS objects and DESeq2 QC outputs are skipped in this mode. See the [usage documentation](https://nf-co.re/rnaseq/usage#per-sample-quantification---skip_quantification_merge) for details.
+`*gene_counts_length_scaled.tsv` is not produced in this mode (see [#1822](https://github.com/nf-core/rnaseq/issues/1822)). SummarizedExperiment RDS objects and DESeq2 QC outputs are skipped in this mode. See the [usage documentation](https://nf-co.re/rnaseq/usage#per-sample-quantification---skip_quantification_merge) for details.
 
 :::tip
 You can access specific assay matrices from the `SummarizedExperiment` RDS object with the following R code:

@@ -147,7 +147,7 @@
                     "subread": "2.0.6"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "TXIMETA_TXIMPORT": {
                     "bioconductor-tximeta": "1.20.1"
@@ -966,6 +966,7 @@
                 "star_rsem/rsem.merged.transcript_lengths.tsv",
                 "star_rsem/rsem.merged.transcript_tpm.tsv",
                 "star_rsem/rsem.merged.tx2gene.tsv",
+                "star_rsem/rsem.merged.tx2gene_augmented.tsv",
                 "star_rsem/rsem_merge_counts",
                 "star_rsem/rsem_merge_counts/rsem.merged.gene_counts.tsv",
                 "star_rsem/rsem_merge_counts/rsem.merged.gene_tpm.tsv",
@@ -1245,6 +1246,7 @@
                 "rsem.merged.transcript_lengths.tsv:md5,cb304a9c4932075da049cea5fe2a8165",
                 "rsem.merged.transcript_tpm.tsv:md5,8fe690a435900ef5a3c1cf639192ac5d",
                 "rsem.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "rsem.merged.tx2gene_augmented.tsv:md5,62f1be3e94901085640179b604d879a2",
                 "rsem.merged.gene_counts.tsv:md5,990cdaf5071c9bfd3d2d99296feb68f3",
                 "rsem.merged.gene_tpm.tsv:md5,349f2184161d6b269a0f5c4da1dee07a",
                 "rsem.merged.genes_long.tsv:md5,42e9a0220b0e3a505d7b59df279ce89a",
@@ -1278,10 +1280,10 @@
                 "i_data.ctab:md5,7e81ace0a68bfe42482420b7275de195"
             ]
         ],
-        "timestamp": "2026-04-22T17:31:07.391686257",
+        "timestamp": "2026-05-01T16:41:18.904088528",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     },
     "Params: --aligner star_rsem - stub": {
@@ -1327,7 +1329,7 @@
                     "star": "2.7.11b"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "UNTAR_SALMON_INDEX": {
                     "untar": 1.34

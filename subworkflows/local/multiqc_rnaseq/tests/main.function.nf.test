@@ -431,7 +431,72 @@ headers:
         then {
             assertAll(
                 { assert function.success },
-                { assert snapshot(function.result).match() },
+                { assert snapshot(function.result.md5()).match() },
+            )
+        }
+    }
+
+    test("Test Function strandCheckSummaryYaml sorts multi-sample rows by sample id") {
+
+        function "strandCheckSummaryYaml"
+
+        when {
+            function {
+                """
+                input[0] = [
+                    id: 'demo',
+                    headers: [
+                        provided:        [title: 'Provided'],
+                        salmon_inferred: [title: 'Salmon inferred'],
+                        salmon_pct:      [title: 'Salmon %'],
+                        salmon_s:        [title: 'Salmon Sense %'],
+                        salmon_a:        [title: 'Salmon Antisense %'],
+                        salmon_u:        [title: 'Salmon Unstranded %'],
+                        rseqc_inferred:  [title: 'RSeQC inferred'],
+                        rseqc_pct:       [title: 'RSeQC %'],
+                        rseqc_s:         [title: 'RSeQC Sense %'],
+                        rseqc_a:         [title: 'RSeQC Antisense %'],
+                        rseqc_u:         [title: 'RSeQC Unstranded %'],
+                        status:          [title: 'Status'],
+                    ],
+                ]
+                // Rows supplied in shuffled order; the helper must emit the data
+                // map keyed by sample id in alphabetical order.
+                input[1] = [
+                    [
+                        [id: 'WT_REP2'],
+                        'auto', 'pass',
+                        [inferred_strandedness: 'reverse', forwardFragments: 10.0, reverseFragments: 85.0, unstrandedFragments: 5.0],
+                        [inferred_strandedness: 'reverse', forwardFragments:  9.1, reverseFragments: 86.3, unstrandedFragments: 4.6],
+                    ],
+                    [
+                        [id: 'RAP1_IAA_30M_REP1'],
+                        'auto', 'pass',
+                        [inferred_strandedness: 'reverse', forwardFragments: 11.0, reverseFragments: 84.0, unstrandedFragments: 5.0],
+                        [inferred_strandedness: 'reverse', forwardFragments:  9.5, reverseFragments: 85.0, unstrandedFragments: 5.5],
+                    ],
+                    [
+                        [id: 'WT_REP1'],
+                        'auto', 'pass',
+                        [inferred_strandedness: 'reverse', forwardFragments: 10.0, reverseFragments: 85.0, unstrandedFragments: 5.0],
+                        [inferred_strandedness: 'reverse', forwardFragments:  9.1, reverseFragments: 86.3, unstrandedFragments: 4.6],
+                    ],
+                ]
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert function.success },
+                {
+                    // Parse the JSON and assert keys appear alphabetically.
+                    def json   = new groovy.json.JsonSlurper().parseText(function.result)
+                    def keys   = json.data.keySet().toList()
+                    def sorted = keys.toSorted()
+                    assert keys == sorted : "Expected sample keys in alphabetical order, got: ${keys}"
+                },
+                { assert snapshot(function.result.md5()).match() },
             )
         }
     }

@@ -123,7 +123,7 @@
                     "subread": "2.0.6"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "TXIMETA_TXIMPORT": {
                     "bioconductor-tximeta": "1.20.1"
@@ -871,6 +871,7 @@
                 "star_rsem/rsem.merged.transcript_lengths.tsv",
                 "star_rsem/rsem.merged.transcript_tpm.tsv",
                 "star_rsem/rsem.merged.tx2gene.tsv",
+                "star_rsem/rsem.merged.tx2gene_augmented.tsv",
                 "star_rsem/rsem_merge_counts",
                 "star_rsem/rsem_merge_counts/rsem.merged.gene_counts.tsv",
                 "star_rsem/rsem_merge_counts/rsem.merged.gene_tpm.tsv",
@@ -1180,6 +1181,7 @@
                 "rsem.merged.transcript_lengths.tsv:md5,f9480624067d84644f45a932d033444f",
                 "rsem.merged.transcript_tpm.tsv:md5,b7df63f5134101587b8e5e597110fccf",
                 "rsem.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "rsem.merged.tx2gene_augmented.tsv:md5,62f1be3e94901085640179b604d879a2",
                 "rsem.merged.gene_counts.tsv:md5,e6d1de9e1a26136e4047022b3b489e2d",
                 "rsem.merged.gene_tpm.tsv:md5,a31ecca01f1e91a18409e393595ce19b",
                 "rsem.merged.genes_long.tsv:md5,c5c487549a0bc04be1382a88bb1366bb",
@@ -1231,10 +1233,10 @@
                 "WT_REP2.umi_extract_2.fastq.gz:md5,067ff23f8d1307ad241cd70bc186b5c1"
             ]
         ],
-        "timestamp": "2026-04-22T17:34:37.104038632",
+        "timestamp": "2026-05-01T16:46:57.239165049",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     },
     "--umi_dedup_tool 'umitools'": {
@@ -1352,7 +1354,7 @@
                     "subread": "2.0.6"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "TXIMETA_TXIMPORT": {
                     "bioconductor-tximeta": "1.20.1"
@@ -2251,6 +2253,7 @@
                 "star_salmon/salmon.merged.transcript_lengths.tsv",
                 "star_salmon/salmon.merged.transcript_tpm.tsv",
                 "star_salmon/salmon.merged.tx2gene.tsv",
+                "star_salmon/salmon.merged.tx2gene_augmented.tsv",
                 "star_salmon/samtools_stats",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.sorted.bam.flagstat",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.sorted.bam.idxstats",
@@ -2457,6 +2460,7 @@
                 "WT_REP1.infer_experiment.txt:md5,63c888e13ef0fa915abd6e7c26ffde48",
                 "WT_REP2.infer_experiment.txt:md5,3e6940ec81e6a809f929362ba4ba4a56",
                 "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "RAP1_IAA_30M_REP1.umi_dedup.sorted_edit_distance.tsv:md5,c10c34b83b200187b53d530372ceffad",
                 "RAP1_IAA_30M_REP1.umi_dedup.sorted_per_umi.tsv:md5,c6ce5764c03a128aba62f5ed13148a26",
                 "RAP1_IAA_30M_REP1.umi_dedup.sorted_per_umi_per_position.tsv:md5,f37b7f5a783425506b434c9e5ff90f25",
@@ -2497,10 +2501,10 @@
                 "WT_REP2.umi_extract_2.fastq.gz:md5,067ff23f8d1307ad241cd70bc186b5c1"
             ]
         ],
-        "timestamp": "2026-04-22T17:37:05.820604066",
+        "timestamp": "2026-05-01T16:44:06.583208713",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     },
     "Params: --aligner hisat2 --umi_dedup_tool 'umicollapse'": {
@@ -2602,7 +2606,7 @@
                     "subread": "2.0.6"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "UMICOLLAPSE": {
                     "umicollapse": "1.1.0-0"
@@ -3541,7 +3545,7 @@
                     "star": "2.7.11b"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "UMITOOLS_EXTRACT": {
                     "umitools": "1.1.6"

@@ -55,7 +55,7 @@
                     "bioconductor-summarizedexperiment": "1.32.0"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "TXIMETA_TXIMPORT": {
                     "bioconductor-tximeta": "1.20.1"
@@ -145,6 +145,7 @@
                 "kallisto/kallisto.merged.transcript_lengths.tsv",
                 "kallisto/kallisto.merged.transcript_tpm.tsv",
                 "kallisto/kallisto.merged.tx2gene.tsv",
+                "kallisto/kallisto.merged.tx2gene_augmented.tsv",
                 "multiqc",
                 "multiqc/multiqc_report.html",
                 "multiqc/multiqc_report_data",
@@ -266,6 +267,7 @@
             ],
             [
                 "kallisto.merged.tx2gene.tsv:md5,1be389a28cc26d94b19ea918959ac72e",
+                "kallisto.merged.tx2gene_augmented.tsv:md5,58aa7e040b0ff1a512ced6b85b9939ac",
                 "cutadapt_filtered_reads_plot.txt:md5,6fa381627f7c1f664f3d4b2cb79cce90",
                 "cutadapt_trimmed_sequences_plot_3_Counts.txt:md5,13dfa866fd91dbb072689efe9aa83b1f",
                 "cutadapt_trimmed_sequences_plot_3_Obs_Exp.txt:md5,07145dd8dd3db654859b18eb0389046c",
@@ -284,10 +286,10 @@
                 "multiqc_strand_check_summary_table.txt:md5,7825c502243e9901873965fd870cd789"
             ]
         ],
-        "timestamp": "2026-04-21T20:09:28.421156775",
+        "timestamp": "2026-05-01T16:26:36.372689451",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     },
     "Params: --pseudo_aligner kallisto --skip_qc --skip_alignment - stub": {
@@ -322,7 +324,7 @@
                     "samtools": "1.23.1"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "UNTAR_SALMON_INDEX": {
                     "untar": 1.34

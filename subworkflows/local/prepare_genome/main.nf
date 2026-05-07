@@ -40,6 +40,7 @@ include { SENTIEON_RSEMPREPAREREFERENCE as SENTIEON_RSEM_PREPAREREFERENCE_GENOME
 include { SENTIEON_RSEMPREPAREREFERENCE as SENTIEON_MAKE_TRANSCRIPTS_FASTA       } from '../../../modules/nf-core/sentieon/rsempreparereference'
 
 include { PREPROCESS_TRANSCRIPTS_FASTA_GENCODE } from '../../../modules/local/preprocess_transcripts_fasta_gencode'
+include { STAR_GENOMEPARAMS_UPGRADE           } from '../../../modules/local/star_genomeparams_upgrade'
 include { EAUTILS_GTF2BED                      } from '../../../modules/nf-core/ea-utils/gtf2bed'
 include { CUSTOM_GTFFILTER                     } from '../../../modules/nf-core/custom/gtffilter'
 
@@ -78,6 +79,7 @@ workflow PREPARE_GENOME {
     use_parabricks_star      // boolean: whether to use parabricks STAR version
     contaminant_screening    // string: contaminant screening tool ('kraken2', 'kraken2_bracken', 'sylph', or null)
     prokaryotic              // boolean: whether the genome is prokaryotic (CDS-only annotation - use gffread --bed for gene BED since ea-utils/gtf2bed only handles exon features)
+    star_index_legacy        // boolean: whether the supplied star_index was built with STAR 2.6.x and needs genomeParameters.txt upgraded to the 2.7.4a metadata schema
 
     main:
     //---------------------------
@@ -323,15 +325,19 @@ workflow PREPARE_GENOME {
                 ch_gtf.map   { item -> [ [:], item ] }
             ).index.map { tuple -> tuple[1] }
         } else if (star_index) {
-            if (star_index.endsWith('.tar.gz')) {
-                ch_star_index = UNTAR_STAR_INDEX ([ [:], file(star_index, checkIfExists: true) ]).untar.map { tuple -> tuple[1] }
-            } else {
-                ch_star_index = channel.value(file(star_index, checkIfExists: true))
-            }
+            // Pre-built STAR index supplied by the user. When star_index_legacy is set
+            // (genomes-map opt-in for indices built with STAR 2.6.x, e.g. AWS iGenomes),
+            // route through STAR_GENOMEPARAMS_UPGRADE to rewrite `versionGenome 20201` and
+            // add the genomeType / genomeTransformType / genomeTransformVCF fields that
+            // STAR 2.7.4a+ requires. Modern indices skip the adapter entirely.
+            def ch_star_raw = star_index.endsWith('.tar.gz')
+                ? UNTAR_STAR_INDEX([ [:], file(star_index, checkIfExists: true) ]).untar
+                : channel.value([ [:], file(star_index, checkIfExists: true) ])
+            ch_star_index = star_index_legacy
+                ? STAR_GENOMEPARAMS_UPGRADE(ch_star_raw).index.map { tuple -> tuple[1] }
+                : ch_star_raw.map { tuple -> tuple[1] }
         }
         else if (fasta_provided) {
-            // Build new STAR index with current STAR version.
-            // No need for iGenomes STAR 2.6.1d here - that's only for pre-built index compatibility.
             ch_star_index = STAR_GENOMEGENERATE(
                 ch_fasta.map { item -> [ [:], item ] },
                 ch_gtf.map { item -> [ [:], item ] }

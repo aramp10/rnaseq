@@ -48,7 +48,7 @@
                     "star": "2.7.11b"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "UNTAR_SALMON_INDEX": {
                     "untar": 1.34
@@ -192,7 +192,7 @@
                     "star": "2.7.11b"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "TXIMETA_TXIMPORT": {
                     "bioconductor-tximeta": "1.20.1"
@@ -525,6 +525,7 @@
                 "salmon/salmon.merged.transcript_lengths.tsv",
                 "salmon/salmon.merged.transcript_tpm.tsv",
                 "salmon/salmon.merged.tx2gene.tsv",
+                "salmon/salmon.merged.tx2gene_augmented.tsv",
                 "sortmerna",
                 "sortmerna/RAP1_IAA_30M_REP1.sortmerna.log",
                 "sortmerna/RAP1_UNINDUCED_REP1.sortmerna.log",
@@ -655,6 +656,7 @@
                 "star_salmon/salmon.merged.transcript_lengths.tsv",
                 "star_salmon/salmon.merged.transcript_tpm.tsv",
                 "star_salmon/salmon.merged.tx2gene.tsv",
+                "star_salmon/salmon.merged.tx2gene_augmented.tsv",
                 "star_salmon/samtools_stats",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.flagstat",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.idxstats",
@@ -751,6 +753,7 @@
                 "cmd_info.json:md5,fa7b659f1ba90e16b0d0a375ff318b01",
                 "lib_format_counts.json:md5,5077c12c422e9e9a1a914bf27b471ad7",
                 "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "ambig_info.tsv:md5,a5088158e63b3419cd9ba028e47a5a01",
                 "expected_bias.gz:md5,3407f87245d0003e0ffbfdf6d8c04f20",
                 "observed_bias.gz:md5,92bcd0592d22a6a58d0360fc76103e56",
@@ -781,13 +784,14 @@
                 "RAP1_UNINDUCED_REP2.SJ.out.tab:md5,78bbe46631af21a2d8b696b0e5e722ff",
                 "WT_REP1.SJ.out.tab:md5,9c39e31ae6317fc68edfeccca9ee0f66",
                 "WT_REP2.SJ.out.tab:md5,91de7727d282e21ca8cd7c16c0cb9d9f",
-                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
+                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
             ]
         ],
-        "timestamp": "2026-04-22T17:21:44.295368206",
+        "timestamp": "2026-05-01T16:36:22.644368433",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     },
     "Params: --remove_ribo_rna - stub": {
@@ -833,7 +837,7 @@
                     "star": "2.7.11b"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "UNTAR_SALMON_INDEX": {
                     "untar": 1.34
@@ -990,7 +994,7 @@
                     "star": "2.7.11b"
                 },
                 "TRIMGALORE": {
-                    "trimgalore": "0.6.10"
+                    "trimgalore": "2.1.0"
                 },
                 "TXIMETA_TXIMPORT": {
                     "bioconductor-tximeta": "1.20.1"
@@ -1337,6 +1341,7 @@
                 "salmon/salmon.merged.transcript_lengths.tsv",
                 "salmon/salmon.merged.transcript_tpm.tsv",
                 "salmon/salmon.merged.tx2gene.tsv",
+                "salmon/salmon.merged.tx2gene_augmented.tsv",
                 "seqkit",
                 "seqkit/smr_v4.3_fast_db_dna_converted.fasta",
                 "seqkit/smr_v4.3_fast_db_prefixed.fasta",
@@ -1464,6 +1469,7 @@
                 "star_salmon/salmon.merged.transcript_lengths.tsv",
                 "star_salmon/salmon.merged.transcript_tpm.tsv",
                 "star_salmon/salmon.merged.tx2gene.tsv",
+                "star_salmon/salmon.merged.tx2gene_augmented.tsv",
                 "star_salmon/samtools_stats",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.flagstat",
                 "star_salmon/samtools_stats/RAP1_IAA_30M_REP1.markdup.sorted.bam.idxstats",
@@ -1560,6 +1566,7 @@
                 "cmd_info.json:md5,994cf13defc7a9d70bd4baf5477bfe31",
                 "lib_format_counts.json:md5,16dcff00f7cf47636023f0f34ecb6e6f",
                 "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
                 "smr_v4.3_fast_db_dna_converted.fasta:md5,8203043c7c7c55e3608afe90d28cfb7d",
                 "smr_v4.3_fast_db_prefixed.fasta:md5,22042291892d8986ceb3df59d14ffa17",
                 "ambig_info.tsv:md5,520c30e5346fcbf3d84789218020baf6",
@@ -1592,13 +1599,14 @@
                 "RAP1_UNINDUCED_REP2.SJ.out.tab:md5,78bbe46631af21a2d8b696b0e5e722ff",
                 "WT_REP1.SJ.out.tab:md5,1537e4467ccbc63fa3bd38c5fcc5d6ab",
                 "WT_REP2.SJ.out.tab:md5,bfecc6159d9a19607255be7dadf9192f",
-                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
+                "salmon.merged.tx2gene.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe",
+                "salmon.merged.tx2gene_augmented.tsv:md5,0e2418a69d2eba45097ebffc2f700bfe"
             ]
         ],
-        "timestamp": "2026-04-22T17:24:58.844418127",
+        "timestamp": "2026-05-01T16:43:36.822610803",
         "meta": {
             "nf-test": "0.9.5",
-            "nextflow": "25.10.4"
+            "nextflow": "26.04.0"
         }
     }
 }
