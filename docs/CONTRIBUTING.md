@@ -227,4 +227,4 @@ Non-deterministic outputs (STAR, Salmon, Kallisto, RSEM, HISAT2 indices; qualima
 
 #### CHANGELOG
 
-One-line entry per PR under the unreleased section, focused on the *what*, not the implementation history. A `### Software dependencies` table at the end of each release section captures tool version bumps (Old → New).
+One-line entry per PR under the unreleased section, focused on the _what_, not the implementation history. A `### Software dependencies` table at the end of each release section captures tool version bumps (Old → New).
