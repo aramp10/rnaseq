@@ -39,6 +39,7 @@ Special thanks to the following for their contributions to the release:
 - [PR #1837](https://github.com/nf-core/rnaseq/pull/1837) - Bump version to 3.26.0 ahead of release
 - [PR #1839](https://github.com/nf-core/rnaseq/pull/1839) - Address review feedback from #1838: condense the two large `strandCheckSummaryYaml` JSON snapshots in `multiqc_rnaseq` function tests to `.md5()`; add this Software dependencies subsection summarising tool version bumps in 3.26.0
 - [PR #1840](https://github.com/nf-core/rnaseq/pull/1840) - Address further review feedback from #1838: lowercase `Channel.x` → `channel.x` in local test files and `workflows/rnaseq/main.nf`; pin `params.outdir` in the `PIPELINE_COMPLETION` test so Nextflow execution reports land in the nf-test sandbox instead of a literal `null/pipeline_info/` directory; populate the previously empty "Pipeline specific contribution guidelines" section in `docs/CONTRIBUTING.md` with rnaseq-specific notes (test profiles, CI skip env vars, `.nftignore`, snapshots, version-reporting topic, module configs)
+- [PR #1841](https://github.com/nf-core/rnaseq/pull/1841) - Pin `TRIMGALORE` to 12 cpus on the rnaseq-side selector to restore `--cores 8` (paired) after the upstream label downgrade in #1836 dropped `task.cpus` to 6 and halved trim_galore throughput
 
 ### Software dependencies
 
