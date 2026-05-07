@@ -431,7 +431,7 @@ headers:
         then {
             assertAll(
                 { assert function.success },
-                { assert snapshot(function.result).match() },
+                { assert snapshot(function.result.md5()).match() },
             )
         }
     }
@@ -496,7 +496,7 @@ headers:
                     def sorted = keys.toSorted()
                     assert keys == sorted : "Expected sample keys in alphabetical order, got: ${keys}"
                 },
-                { assert snapshot(function.result).match() },
+                { assert snapshot(function.result.md5()).match() },
             )
         }
     }
