@@ -41,13 +41,13 @@ Special thanks to the following for their contributions to the release:
 
 ### Software dependencies
 
-| Dependency    | Old version | New version |
-| ------------- | ----------- | ----------- |
-| `trim-galore` | 0.6.10      | 2.1.0       |
-| `gawk`        |             | 5.3.1       |
-| `STAR`        | 2.6.1d      |             |
+| Dependency      | Old version | New version |
+| --------------- | ----------- | ----------- |
+| `trim-galore`   | 0.6.10      | 2.1.0       |
+| `gawk`          |             | 5.3.1       |
+| `STAR` (legacy) | 2.6.1d      |             |
 
-`gawk` is added as a dependency of the new `STAR_GENOMEPARAMS_UPGRADE` local module. The STAR 2.6.1d row reflects removal of the parallel legacy aligner pin; pipeline-default STAR (2.7.4a) is unchanged.
+`gawk` is added as a dependency of the new `STAR_GENOMEPARAMS_UPGRADE` local module. The `STAR` (legacy) row reflects removal of the parallel STAR 2.6.1d build that ran alongside the default aligner for legacy iGenomes indices; the pipeline-default STAR is unchanged.
 
 ## [[3.25.0](https://github.com/nf-core/rnaseq/releases/tag/3.25.0)] - 2026-04-24
 
