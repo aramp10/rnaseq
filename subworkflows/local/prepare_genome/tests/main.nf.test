@@ -54,6 +54,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -137,6 +138,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -220,6 +222,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -303,6 +306,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -386,6 +390,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -469,6 +474,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -552,6 +558,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -635,6 +642,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -718,6 +726,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -801,6 +810,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -884,6 +894,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -967,6 +978,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1050,6 +1062,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1133,6 +1146,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1216,6 +1230,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1299,6 +1314,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1382,6 +1398,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1465,6 +1482,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1548,6 +1566,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1631,6 +1650,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1714,6 +1734,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1799,6 +1820,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1875,6 +1897,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1960,6 +1983,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2045,6 +2069,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2130,6 +2155,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2200,6 +2226,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2285,6 +2312,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2370,6 +2398,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2455,6 +2484,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2540,6 +2570,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2625,6 +2656,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2710,6 +2742,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2795,6 +2828,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2880,6 +2914,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2965,6 +3000,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -3050,6 +3086,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -3135,6 +3172,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -3220,6 +3258,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -3305,6 +3344,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -3390,6 +3430,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -3460,6 +3501,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -3545,6 +3587,7 @@ nextflow_workflow {
                 input[29] = use_parabricks_star
                 input[30] = null  // contaminant_screening
                 input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }

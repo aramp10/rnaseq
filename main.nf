@@ -42,6 +42,7 @@ include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_rnas
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_rnaseq_pipeline'
 include { checkMaxContigSize      } from './subworkflows/local/utils_nfcore_rnaseq_pipeline'
 include { defineQcTools           } from './subworkflows/local/utils_nfcore_rnaseq_pipeline'
+include { isStarIndexLegacy       } from './subworkflows/local/utils_nfcore_rnaseq_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -91,7 +92,8 @@ workflow NFCORE_RNASEQ {
         params.use_sentieon_star,
         params.use_parabricks_star,
         params.contaminant_screening,
-        params.prokaryotic ?: false
+        params.prokaryotic ?: false,
+        isStarIndexLegacy() ?: false
     )
 
     // Check if contigs in genome fasta file > 512 Mbp
