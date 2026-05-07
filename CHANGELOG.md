@@ -38,6 +38,7 @@ Special thanks to the following for their contributions to the release:
 - [PR #1836](https://github.com/nf-core/rnaseq/pull/1836) - Reinstall `trimgalore` module to pick up upstream label change (`process_high` → `process_medium` + `process_low_memory`); add the matching `process_low_memory` definition (1 GB) to `conf/base.config` per the nf-core/tools template
 - [PR #1837](https://github.com/nf-core/rnaseq/pull/1837) - Bump version to 3.26.0 ahead of release
 - [PR #1839](https://github.com/nf-core/rnaseq/pull/1839) - Address review feedback from #1838: condense the two large `strandCheckSummaryYaml` JSON snapshots in `multiqc_rnaseq` function tests to `.md5()`; add this Software dependencies subsection summarising tool version bumps in 3.26.0
+- [PR #1840](https://github.com/nf-core/rnaseq/pull/1840) - Address further review feedback from #1838: lowercase `Channel.x` → `channel.x` in local test files and `workflows/rnaseq/main.nf`; pin `params.outdir` in the `PIPELINE_COMPLETION` test so Nextflow execution reports land in the nf-test sandbox instead of a literal `null/pipeline_info/` directory; populate the previously empty "Pipeline specific contribution guidelines" section in `docs/CONTRIBUTING.md` with rnaseq-specific notes (test profiles, CI skip env vars, `.nftignore`, snapshots, version-reporting topic, module configs)
 
 ### Software dependencies
 
