@@ -37,6 +37,17 @@ Special thanks to the following for their contributions to the release:
 - [PR #1835](https://github.com/nf-core/rnaseq/pull/1835) - Drop the STAR 2.6.1d alignment pin in favour of a metadata-only upgrade adapter. Genome-map entries flagged `star_legacy = true` route through a new `STAR_GENOMEPARAMS_UPGRADE` process that rewrites the legacy `genomeParameters.txt` to the 2.7.4a schema, so stock STAR runs the modern build the pipeline ships; Sentieon and Parabricks STAR branches bypass the upgrade. Removes `STAR_ALIGN_LEGACY`, the parallel STAR 2.6.1d Wave/conda containers, `conf/legacy_star.config`, and the ARM-specific 2.6.1d override
 - [PR #1836](https://github.com/nf-core/rnaseq/pull/1836) - Reinstall `trimgalore` module to pick up upstream label change (`process_high` → `process_medium` + `process_low_memory`); add the matching `process_low_memory` definition (1 GB) to `conf/base.config` per the nf-core/tools template
 - [PR #1837](https://github.com/nf-core/rnaseq/pull/1837) - Bump version to 3.26.0 ahead of release
+- [PR #1839](https://github.com/nf-core/rnaseq/pull/1839) - Address review feedback from #1838: condense the two large `strandCheckSummaryYaml` JSON snapshots in `multiqc_rnaseq` function tests to `.md5()`; add this Software dependencies subsection summarising tool version bumps in 3.26.0
+
+### Software dependencies
+
+| Dependency      | Old version | New version |
+| --------------- | ----------- | ----------- |
+| `trim-galore`   | 0.6.10      | 2.1.0       |
+| `gawk`          |             | 5.3.1       |
+| `STAR` (legacy) | 2.6.1d      |             |
+
+`gawk` is added as a dependency of the new `STAR_GENOMEPARAMS_UPGRADE` local module. The `STAR` (legacy) row reflects removal of the parallel STAR 2.6.1d build that ran alongside the default aligner for legacy iGenomes indices; the pipeline-default STAR is unchanged.
 
 ## [[3.25.0](https://github.com/nf-core/rnaseq/releases/tag/3.25.0)] - 2026-04-24
 

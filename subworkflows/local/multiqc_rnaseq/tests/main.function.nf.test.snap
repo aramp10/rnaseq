@@ -11,9 +11,9 @@
     },
     "Test Function strandCheckSummaryYaml emits JSON keyed by sample id": {
         "content": [
-            "{\n    \"id\": \"demo\",\n    \"headers\": {\n        \"provided\": {\n            \"title\": \"Provided\"\n        },\n        \"salmon_inferred\": {\n            \"title\": \"Salmon inferred\"\n        },\n        \"salmon_pct\": {\n            \"title\": \"Salmon %\"\n        },\n        \"salmon_s\": {\n            \"title\": \"Salmon Sense %\"\n        },\n        \"salmon_a\": {\n            \"title\": \"Salmon Antisense %\"\n        },\n        \"salmon_u\": {\n            \"title\": \"Salmon Unstranded %\"\n        },\n        \"rseqc_inferred\": {\n            \"title\": \"RSeQC inferred\"\n        },\n        \"rseqc_pct\": {\n            \"title\": \"RSeQC %\"\n        },\n        \"rseqc_s\": {\n            \"title\": \"RSeQC Sense %\"\n        },\n        \"rseqc_a\": {\n            \"title\": \"RSeQC Antisense %\"\n        },\n        \"rseqc_u\": {\n            \"title\": \"RSeQC Unstranded %\"\n        },\n        \"status\": {\n            \"title\": \"Status\"\n        }\n    },\n    \"data\": {\n        \"WT_REP1\": {\n            \"provided\": \"auto\",\n            \"salmon_inferred\": \"reverse\",\n            \"salmon_pct\": 89.5,\n            \"salmon_s\": 10.0,\n            \"salmon_a\": 85.0,\n            \"salmon_u\": 5.0,\n            \"rseqc_inferred\": \"reverse\",\n            \"rseqc_pct\": 90.5,\n            \"rseqc_s\": 9.1,\n            \"rseqc_a\": 86.3,\n            \"rseqc_u\": 4.6,\n            \"status\": \"pass\"\n        }\n    }\n}"
+            "6d6bfe594a0468fb488595e11423ffdf"
         ],
-        "timestamp": "2026-05-06T12:55:34.777936317",
+        "timestamp": "2026-05-07T11:54:31.102190125",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
@@ -65,9 +65,9 @@
     },
     "Test Function strandCheckSummaryYaml sorts multi-sample rows by sample id": {
         "content": [
-            "{\n    \"id\": \"demo\",\n    \"headers\": {\n        \"provided\": {\n            \"title\": \"Provided\"\n        },\n        \"salmon_inferred\": {\n            \"title\": \"Salmon inferred\"\n        },\n        \"salmon_pct\": {\n            \"title\": \"Salmon %\"\n        },\n        \"salmon_s\": {\n            \"title\": \"Salmon Sense %\"\n        },\n        \"salmon_a\": {\n            \"title\": \"Salmon Antisense %\"\n        },\n        \"salmon_u\": {\n            \"title\": \"Salmon Unstranded %\"\n        },\n        \"rseqc_inferred\": {\n            \"title\": \"RSeQC inferred\"\n        },\n        \"rseqc_pct\": {\n            \"title\": \"RSeQC %\"\n        },\n        \"rseqc_s\": {\n            \"title\": \"RSeQC Sense %\"\n        },\n        \"rseqc_a\": {\n            \"title\": \"RSeQC Antisense %\"\n        },\n        \"rseqc_u\": {\n            \"title\": \"RSeQC Unstranded %\"\n        },\n        \"status\": {\n            \"title\": \"Status\"\n        }\n    },\n    \"data\": {\n        \"RAP1_IAA_30M_REP1\": {\n            \"provided\": \"auto\",\n            \"salmon_inferred\": \"reverse\",\n            \"salmon_pct\": 88.4,\n            \"salmon_s\": 11.0,\n            \"salmon_a\": 84.0,\n            \"salmon_u\": 5.0,\n            \"rseqc_inferred\": \"reverse\",\n            \"rseqc_pct\": 89.9,\n            \"rseqc_s\": 9.5,\n            \"rseqc_a\": 85.0,\n            \"rseqc_u\": 5.5,\n            \"status\": \"pass\"\n        },\n        \"WT_REP1\": {\n            \"provided\": \"auto\",\n            \"salmon_inferred\": \"reverse\",\n            \"salmon_pct\": 89.5,\n            \"salmon_s\": 10.0,\n            \"salmon_a\": 85.0,\n            \"salmon_u\": 5.0,\n            \"rseqc_inferred\": \"reverse\",\n            \"rseqc_pct\": 90.5,\n            \"rseqc_s\": 9.1,\n            \"rseqc_a\": 86.3,\n            \"rseqc_u\": 4.6,\n            \"status\": \"pass\"\n        },\n        \"WT_REP2\": {\n            \"provided\": \"auto\",\n            \"salmon_inferred\": \"reverse\",\n            \"salmon_pct\": 89.5,\n            \"salmon_s\": 10.0,\n            \"salmon_a\": 85.0,\n            \"salmon_u\": 5.0,\n            \"rseqc_inferred\": \"reverse\",\n            \"rseqc_pct\": 90.5,\n            \"rseqc_s\": 9.1,\n            \"rseqc_a\": 86.3,\n            \"rseqc_u\": 4.6,\n            \"status\": \"pass\"\n        }\n    }\n}"
+            "dca737b419d8f202cf81d15cd1ae1ab1"
         ],
-        "timestamp": "2026-05-06T12:55:44.044854451",
+        "timestamp": "2026-05-07T11:54:40.203882744",
         "meta": {
             "nf-test": "0.9.5",
             "nextflow": "26.04.0"
