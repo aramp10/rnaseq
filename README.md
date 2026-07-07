@@ -224,7 +224,11 @@ Note:
 
 ## Troubleshooting
 
-* **Ticket [INC20910484](https://bu.service-now.com/now/nav/ui/classic/params/target/task_list.do%3Fsysparm_query%3Dactive%253Dtrue%255Eassigned_to%253Djavascript%3AgetMyAssignments()%255Esys_class_name%253Drm_release_scrum%255EORsys_class_name%253Dchange_request%255EORsys_class_name%253Dsc_task%255EORsys_class_name%253Drm_defect%255EORsys_class_name%253Drm_doc%255EORsys_class_name%253Drm_enhancement%255EORsys_class_name%253Dincident%255EORsys_class_name%253Dissue%255EORsys_class_name%253Dvtb_task%255EORsys_class_name%253Dproblem%255EORsys_class_name%253Dproblem_task%255EORsys_class_name%253Drm_release%255EORsys_class_name%253Ddmn_requirement%255EORsys_class_name%253Drm_scrum_task%255EORsys_class_name%253Drm_release_sdlc%255EORsys_class_name%253Drm_story%255EORsys_class_name%253Dtm_test_case_instance%255EORsys_class_name%253Dpm_project_task%255EORsys_class_name%253Dsn_si_incident%255EORsys_class_name%253Dsn_si_task%255ENQactive%253Dtrue%255Eassigned_to%253Djavascript%3AgetMyAssignments()%255Esys_class_name%253Dsc_req_item%255Eref_sc_req_item.u_action_needed%253Dtrue%255EEQ%26sysparm_view%3DMyWork%26sysparm_userpref_module%3D1523b8d4c611227b00be8216ec331b9a%26sysparm_clear_stack%3Dtrue)** — dupRadar fails with custom host/virus GTF
+* **Ticket [INC20910484](https://bu.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3Df757216ec3150b10832a9610a001318e%26sysparm_stack%3D%26sysparm_view%3D)** — dupRadar fails with custom host/virus GTF
   * **Issue:** featureCounts cannot parse `gene_id` attribute in AGAT-processed viral GTF
   * **Workaround:** Add `"skip_dupradar": true` to your params file
   * **Detailed log:** [nextflow_dupradar_troubleshooting.md](troubleshooting/nextflow_dupradar_troubleshooting.md)
+* **Ticket [INC20898027](https://bu.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3Db750bacc974d8bd4b193fd57f053af5b%26sysparm_stack%3D%26sysparm_view%3D)** — StringTie segfaults on non-model organism GTF with inflated annotations
+  * **Issue:** RepeatMasker/EST/protein2genome entries in the GTF create an oversized StringTie bundle that segfaults
+  * **Workaround:** Filter the GTF to gene-model sources only (e.g. `maker`, `augustus_masked`, `snap_masked`) before passing it to the pipeline
+  * **Detailed log:** [nextflow_stringtie_segfault_troubleshooting.md](troubleshooting/nextflow_stringtie_segfault_troubleshooting.md)
