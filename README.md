@@ -232,3 +232,7 @@ Note:
   * **Issue:** RepeatMasker/EST/protein2genome entries in the GTF create an oversized StringTie bundle that segfaults
   * **Workaround:** Filter the GTF to gene-model sources only (e.g. `maker`, `augustus_masked`, `snap_masked`) before passing it to the pipeline
   * **Detailed log:** [nextflow_stringtie_segfault_troubleshooting.md](troubleshooting/nextflow_stringtie_segfault_troubleshooting.md)
+* **Ticket [INC20925379](https://bu.service-now.com/now/nav/ui/classic/params/target/incident.do)** — Pipeline running in local mode instead of submitting SGE jobs
+  * **Issue:** Typo in `nextflow.config` (`executer` instead of `executor`) was silently ignored by Nextflow, causing all tasks to run locally rather than as individual SGE jobs
+  * **Workaround:** Fix the typo — `executor = 'sge'` — in the `process {}` block
+  * **Detailed log:** [nextflow_local_mode_executor_typo_troubleshooting.md](https://github.com/aramp10/rnaseq/blob/master/troubleshooting/nextflow_local_mode_executor_typo_troubleshooting.md)
