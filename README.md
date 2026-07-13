@@ -235,4 +235,5 @@ Note:
 * **Ticket [INC20925379](https://bu.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsysparm_tiny%3D3358025c87116550a38aedfc0ebb35ab%26sys_id%3Da3fed00697f18b9021effbce2153afbc%26sysparm_record_row%3D2)** — Pipeline running in local mode instead of submitting SGE jobs
   * **Issue:** Typo in `nextflow.config` (`executer` instead of `executor`) was silently ignored by Nextflow, causing all tasks to run locally rather than as individual SGE jobs
   * **Workaround:** Fix the typo — `executor = 'sge'` — in the `process {}` block
+  * **Reproduced:** 2026-07-13 — see Reproduction section in the detailed log below
   * **Detailed log:** [nextflow_local_mode_executor_typo_troubleshooting.md](https://github.com/aramp10/rnaseq/blob/master/troubleshooting/nextflow_local_mode_executor_typo_troubleshooting.md)

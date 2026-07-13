@@ -73,6 +73,51 @@ process {
 Note: indentation is cosmetic only — Nextflow config files use Groovy syntax and aren't
 whitespace-sensitive. The typo, not the formatting, was the actual cause of the issue.
 
+## Reproduction
+
+**Date:** 2026-07-13 · **Reproduced by:** aramp10
+
+To confirm the root cause above (rather than just theorizing it), the issue was reproduced
+end-to-end on this repo, using the test profile so as not to consume unnecessary SCC resources.
+
+1. Ran the pipeline as-is, with the correct `executor = 'sge'` config in `nextflow.config`:
+
+   ```bash
+   nextflow run main.nf -profile test,singularity --outdir rnaseq_out_test
+   ```
+
+   Confirmed via `qstat -u <user>` that Nextflow submitted individual `nf-NFCORE_...` jobs to
+   the SGE queue, and via `.nextflow.log` that tasks were launched through `SgeTaskHandler`.
+   This run (session `exotic_liskov`) ran to completion in SGE mode.
+
+2. Introduced the exact typo from the Root Cause section (`executor` → `executer`) in
+   `nextflow.config`, then re-ran the identical command from a fresh interactive desktop
+   (requested with 16 cores, rather than the original 3, to avoid the same job-termination
+   side effect described in the Issue section above).
+
+3. Re-ran the pipeline with the typo in place:
+
+   ```bash
+   nextflow run main.nf -profile test,singularity --outdir rnaseq_out_test
+   ```
+
+   Confirmed the fallback to local execution — `qstat` showed no new SGE job submissions for
+   this run, and `.nextflow.log` showed every task as `processorType: 'local'`, launched via
+   `LocalTaskHandler` rather than `SgeTaskHandler`. This run (session `curious_mandelbrot`)
+   completed in 2m 53s with all 209 tasks run locally on the interactive desktop's cores.
+
+4. Reverted the typo (`executer` → `executor`) in `nextflow.config` to restore the correct
+   SGE configuration; confirmed via `git diff` that the file matched its original state.
+
+| Run (session name)   | `process.executor` value | Executor observed                    | Duration |
+|-----------------------|---------------------------|---------------------------------------|----------|
+| `exotic_liskov`       | `executor = 'sge'`        | `SgeTaskHandler`, real SGE jobs queued | (queued/ran via cluster) |
+| `curious_mandelbrot`  | `executer = 'sge'` (typo) | `LocalTaskHandler`, `processorType: 'local'` | 2m 53s |
+
+This confirms the mechanism described in Root Cause: Nextflow does not validate unrecognized
+keys, so the typo is silently ignored with no error in `.nextflow.log`, and the pipeline
+falls back to the local executor without any indication to the user.
+
 ## Verification
 
 Re-run using the smaller test profile to confirm tasks now submit as SGE jobs rather than
