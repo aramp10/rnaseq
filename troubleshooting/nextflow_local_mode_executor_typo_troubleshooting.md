@@ -88,7 +88,9 @@ end-to-end on this repo, using the test profile so as not to consume unnecessary
 
    Confirmed via `qstat -u <user>` that Nextflow submitted individual `nf-NFCORE_...` jobs to
    the SGE queue, and via `.nextflow.log` that tasks were launched through `SgeTaskHandler`.
-   This run (session `exotic_liskov`) ran to completion in SGE mode.
+   This run (session `exotic_liskov`) ran to completion in SGE mode, taking 53m 47s
+   (0.9 CPU hours) for all 209 tasks — most of that wall-clock time spent queuing individual
+   tasks on the shared cluster rather than doing actual compute.
 
 2. Introduced the exact typo from the Root Cause section (`executor` → `executer`) in
    `nextflow.config`, then re-ran the identical command from a fresh interactive desktop
@@ -104,15 +106,20 @@ end-to-end on this repo, using the test profile so as not to consume unnecessary
    Confirmed the fallback to local execution — `qstat` showed no new SGE job submissions for
    this run, and `.nextflow.log` showed every task as `processorType: 'local'`, launched via
    `LocalTaskHandler` rather than `SgeTaskHandler`. This run (session `curious_mandelbrot`)
-   completed in 2m 53s with all 209 tasks run locally on the interactive desktop's cores.
+   completed in 2m 53s (0.4 CPU hours) with all 209 tasks run locally on the interactive
+   desktop's cores.
 
 4. Reverted the typo (`executer` → `executor`) in `nextflow.config` to restore the correct
    SGE configuration; confirmed via `git diff` that the file matched its original state.
 
-| Run (session name)   | `process.executor` value | Executor observed                    | Duration |
-|-----------------------|---------------------------|---------------------------------------|----------|
-| `exotic_liskov`       | `executor = 'sge'`        | `SgeTaskHandler`, real SGE jobs queued | (queued/ran via cluster) |
-| `curious_mandelbrot`  | `executer = 'sge'` (typo) | `LocalTaskHandler`, `processorType: 'local'` | 2m 53s |
+| Run (session name)   | `process.executor` value | Executor observed                    | Duration | CPU hours |
+|-----------------------|---------------------------|---------------------------------------|----------|-----------|
+| `exotic_liskov`       | `executor = 'sge'`        | `SgeTaskHandler`, real SGE jobs queued | 53m 47s  | 0.9 |
+| `curious_mandelbrot`  | `executer = 'sge'` (typo) | `LocalTaskHandler`, `processorType: 'local'` | 2m 53s | 0.4 |
+
+The SGE run took roughly 19x longer in wall-clock time despite similar CPU hours — consistent
+with per-task queue time dominating on a small test workload, as noted in the top-level
+README's BU SCC Instructions.
 
 This confirms the mechanism described in Root Cause: Nextflow does not validate unrecognized
 keys, so the typo is silently ignored with no error in `.nextflow.log`, and the pipeline
