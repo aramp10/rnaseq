@@ -12,14 +12,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -37,16 +38,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -56,7 +64,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -64,13 +72,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -81,14 +96,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -106,16 +122,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -125,7 +148,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -133,13 +156,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -150,14 +180,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = true
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -175,16 +206,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -194,7 +232,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -202,13 +240,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -219,14 +264,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter           = false
                 skip_bbsplit             = true
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -244,16 +290,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -263,7 +316,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -271,13 +324,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -288,14 +348,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = true
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -313,16 +374,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -332,7 +400,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -340,13 +408,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -357,14 +432,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = true
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -382,16 +458,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -401,7 +484,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -409,13 +492,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -426,14 +516,15 @@ nextflow_workflow {
                 """
                 gencode                  = true
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = false
@@ -451,16 +542,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -470,7 +568,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -478,13 +576,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -495,14 +600,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -520,16 +626,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -539,7 +652,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -547,13 +660,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -564,14 +684,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -589,16 +710,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -608,7 +736,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -616,13 +744,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -633,14 +768,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -658,16 +794,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -677,7 +820,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -685,13 +828,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -702,14 +852,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -727,16 +878,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -746,7 +904,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -754,13 +912,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -771,14 +936,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_rsem'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -796,16 +962,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -815,7 +988,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -823,13 +996,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -840,14 +1020,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -865,16 +1046,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -884,7 +1072,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -892,13 +1080,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -909,14 +1104,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'hisat2'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -934,16 +1130,23 @@ nextflow_workflow {
                 input[13] = false
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -953,7 +1156,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -961,13 +1164,104 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
+        }
+    }
+
+    test("kallisto_index = false") {
+
+        when {
+            workflow {
+                """
+                gencode                  = false
+                featurecounts_group_type = 'gene_biotype'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'kallisto'
+                skip_gtf_filter          = false
+                skip_bbsplit             = false
+                ribo_removal_tool        = null
+                skip_alignment           = false
+                skip_pseudo_alignment    = false
+                use_sentieon_star        = false
+                use_parabricks_star      = false
+
+                input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
+                input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
+                input[2]  = file(params.pipelines_testdata_base_path + 'reference/genes.gff', checkIfExists: true)
+                input[3]  = file(params.pipelines_testdata_base_path + 'reference/gfp.fa', checkIfExists: true)
+                input[4]  = file(params.pipelines_testdata_base_path + 'reference/transcriptome.fasta', checkIfExists: true)
+                input[5]  = null
+                input[6]  = null
+                input[7]  = file(params.pipelines_testdata_base_path + 'reference/bbsplit_fasta_list.txt', checkIfExists: true)
+                input[8]  = null
+                input[9]  = null
+                input[10] = file(params.pipelines_testdata_base_path + 'reference/rsem.tar.gz', checkIfExists: true)
+                input[11] = file(params.pipelines_testdata_base_path + 'reference/salmon.tar.gz', checkIfExists: true)
+                input[12] = false
+                input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
+                input[14] = null
+                input[15] = null
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.transcript_fasta,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.fasta,
+                    workflow.out.gtf,
+                    workflow.out.fai,
+                    workflow.out.gene_bed,
+                    workflow.out.chrom_sizes,
+                    workflow.out.splicesites,
+                    workflow.out.sortmerna_index,
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
+                ).match() }
+            )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -978,14 +1272,15 @@ nextflow_workflow {
                 """
                 gencode                  = true
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1003,16 +1298,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1022,7 +1324,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -1030,13 +1332,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1047,14 +1356,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_type'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1072,16 +1382,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1091,7 +1408,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -1099,13 +1416,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1116,14 +1440,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = true
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1141,16 +1466,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1160,7 +1492,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -1168,13 +1500,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1185,14 +1524,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = true
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1210,16 +1550,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1229,7 +1576,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -1237,13 +1584,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1254,14 +1608,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = true
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1279,16 +1634,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1298,7 +1660,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -1306,13 +1668,20 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1323,14 +1692,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = true
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1348,16 +1718,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1367,7 +1744,7 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(
                     workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.fasta,
                     workflow.out.gtf,
                     workflow.out.fai,
@@ -1375,31 +1752,41 @@ nextflow_workflow {
                     workflow.out.chrom_sizes,
                     workflow.out.splicesites,
                     workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() }
                 ).match() }
             )
         }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
+        }
     }
 
-    test("use_sentieon_star = true") {
+    test("skip_gtf_transcript_filter = true") {
+
+        config './skip_transcript_filter.config'
 
         when {
             workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
-                skip_bbsplit             = false
-                skip_sortmerna           = true
+                skip_bbsplit             = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
-                use_sentieon_star        = true
+                use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1417,40 +1804,45 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
 
         then {
+            // The test GTF has 1 line with transcript_id "" (empty).
+            // With skip_gtf_transcript_filter=true, that line is preserved,
+            // so the filtered GTF should differ from the default test.
+            def filtered_gtf = file(workflow.out.gtf[0])
+            def default_line_count = 600  // lines with valid transcript_id in genes_with_empty_tid.gtf
             assertAll(
-                { assert workflow.success},
-                { assert snapshot(
-                    workflow.out.transcript_fasta,
-                    workflow.out.salmon_index,
-                    workflow.out.fasta,
-                    workflow.out.gtf,
-                    workflow.out.fai,
-                    workflow.out.gene_bed,
-                    workflow.out.chrom_sizes,
-                    workflow.out.splicesites,
-                    workflow.out.sortmerna_index,
-                    workflow.out.star_index,
-                    workflow.out.rsem_index,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.versions
-                ).match() }
+                { assert workflow.success },
+                { assert filtered_gtf.readLines().size() > default_line_count },
+                { assert snapshot(workflow.out.gtf).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1463,14 +1855,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1488,16 +1881,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1511,17 +1911,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1534,14 +1941,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1559,16 +1967,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1582,17 +1997,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1605,14 +2027,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = true
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1630,16 +2053,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1653,17 +2083,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1676,14 +2113,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = true
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1701,16 +2139,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1720,6 +2165,13 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(workflow.out).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1732,14 +2184,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = true
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1757,16 +2210,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1780,17 +2240,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1803,14 +2270,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = true
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1828,16 +2296,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1851,17 +2326,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1874,14 +2356,15 @@ nextflow_workflow {
                 """
                 gencode                  = true
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = false
@@ -1899,16 +2382,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1922,17 +2412,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -1945,14 +2442,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -1970,16 +2468,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -1993,17 +2498,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2016,14 +2528,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2041,16 +2554,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2064,17 +2584,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2087,14 +2614,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2112,16 +2640,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2135,17 +2670,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2158,14 +2700,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter           = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star         = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2183,16 +2726,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2206,17 +2756,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2229,14 +2786,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_rsem'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter           = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2254,16 +2812,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2277,17 +2842,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2300,14 +2872,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2325,16 +2898,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2348,17 +2928,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2371,14 +2958,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'hisat2'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2396,16 +2984,23 @@ nextflow_workflow {
                 input[13] = false
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2419,17 +3014,110 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
+        }
+    }
+
+    test("kallisto_index = false - stub") {
+
+        options "-stub"
+
+        when {
+            workflow {
+                """
+                gencode                  = false
+                featurecounts_group_type = 'gene_biotype'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'kallisto'
+                skip_gtf_filter          = false
+                skip_bbsplit             = false
+                ribo_removal_tool        = null
+                skip_alignment           = false
+                skip_pseudo_alignment    = false
+                use_sentieon_star        = false
+                use_parabricks_star      = false
+
+                input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
+                input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
+                input[2]  = file(params.pipelines_testdata_base_path + 'reference/genes.gff', checkIfExists: true)
+                input[3]  = file(params.pipelines_testdata_base_path + 'reference/gfp.fa', checkIfExists: true)
+                input[4]  = file(params.pipelines_testdata_base_path + 'reference/transcriptome.fasta', checkIfExists: true)
+                input[5]  = null
+                input[6]  = null
+                input[7]  = file(params.pipelines_testdata_base_path + 'reference/bbsplit_fasta_list.txt', checkIfExists: true)
+                input[8]  = null
+                input[9]  = null
+                input[10] = file(params.pipelines_testdata_base_path + 'reference/rsem.tar.gz', checkIfExists: true)
+                input[11] = file(params.pipelines_testdata_base_path + 'reference/salmon.tar.gz', checkIfExists: true)
+                input[12] = false
+                input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
+                input[14] = null
+                input[15] = null
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    workflow.out.chrom_sizes,
+                    workflow.out.fai,
+                    workflow.out.fasta,
+                    workflow.out.gene_bed,
+                    workflow.out.gtf,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.sortmerna_index,
+                    workflow.out.splicesites,
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
+                ).match() }
+            )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2442,14 +3130,15 @@ nextflow_workflow {
                 """
                 gencode                  = true
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2467,16 +3156,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2490,17 +3186,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2513,14 +3216,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_type'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2538,16 +3242,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2561,17 +3272,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2584,14 +3302,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = true
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2609,16 +3328,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2632,17 +3358,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2655,14 +3388,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = true
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2680,16 +3414,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2699,6 +3440,13 @@ nextflow_workflow {
                 { assert workflow.success},
                 { assert snapshot(workflow.out).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2711,14 +3459,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = true
                 skip_pseudo_alignment    = false
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2736,16 +3485,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2759,17 +3515,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
+        }
+
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
+            }
+            new File("${launchDir}").deleteDir()
         }
     }
 
@@ -2782,14 +3545,15 @@ nextflow_workflow {
                 """
                 gencode                  = false
                 featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
+                aligner                  = 'star_salmon'
+                pseudo_aligner           = 'salmon'
                 skip_gtf_filter          = false
                 skip_bbsplit             = false
-                skip_sortmerna           = true
+                ribo_removal_tool        = null
                 skip_alignment           = false
                 skip_pseudo_alignment    = true
                 use_sentieon_star        = false
+                use_parabricks_star      = false
 
                 input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
                 input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
@@ -2807,16 +3571,23 @@ nextflow_workflow {
                 input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
                 input[14] = null
                 input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
+                input[16] = null
+                input[17] = null  // kraken_db
+                input[18] = gencode
+                input[19] = false
+                input[20] = featurecounts_group_type
+                input[21] = aligner
+                input[22] = pseudo_aligner
+                input[23] = skip_gtf_filter
+                input[24] = skip_bbsplit
+                input[25] = ribo_removal_tool
+                input[26] = skip_alignment
+                input[27] = skip_pseudo_alignment
+                input[28] = use_sentieon_star
+                input[29] = use_parabricks_star
+                input[30] = null  // contaminant_screening
+                input[31] = false // prokaryotic
+                input[32] = false // star_index_legacy
                 """
             }
         }
@@ -2830,88 +3601,24 @@ nextflow_workflow {
                     workflow.out.fasta,
                     workflow.out.gene_bed,
                     workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
+                    workflow.out.hisat2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.bowtie2_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.kallisto_index.collect { meta, path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.rsem_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.salmon_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
                     workflow.out.sortmerna_index,
                     workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
+                    workflow.out.star_index.collect { path -> file(path).listFiles().collect { f -> f.getName() }.sort().toString() },
+                    workflow.out.transcript_fasta
                 ).match() }
             )
         }
-    }
 
-    test("use_sentieon_star - stub") {
-
-        options "-stub"
-
-        when {
-            workflow {
-                """
-                gencode                  = false
-                featurecounts_group_type = 'gene_biotype'
-                aligner                  = 'star_salmon,star_rsem,hisat2'
-                pseudo_aligner           = 'salmon,kallisto'
-                skip_gtf_filter          = false
-                skip_bbsplit             = false
-                skip_sortmerna           = true
-                skip_alignment           = false
-                skip_pseudo_alignment    = false
-                use_sentieon_star        = true
-
-                input[0]  = file(params.pipelines_testdata_base_path + 'reference/genome.fasta', checkIfExists: true)
-                input[1]  = file(params.pipelines_testdata_base_path + 'reference/genes_with_empty_tid.gtf', checkIfExists: true)
-                input[2]  = file(params.pipelines_testdata_base_path + 'reference/genes.gff', checkIfExists: true)
-                input[3]  = file(params.pipelines_testdata_base_path + 'reference/gfp.fa', checkIfExists: true)
-                input[4]  = file(params.pipelines_testdata_base_path + 'reference/transcriptome.fasta', checkIfExists: true)
-                input[5]  = null
-                input[6]  = null
-                input[7]  = file(params.pipelines_testdata_base_path + 'reference/bbsplit_fasta_list.txt', checkIfExists: true)
-                input[8]  = null
-                input[9]  = null
-                input[10] = file(params.pipelines_testdata_base_path + 'reference/rsem.tar.gz', checkIfExists: true)
-                input[11] = file(params.pipelines_testdata_base_path + 'reference/salmon.tar.gz', checkIfExists: true)
-                input[12] = null
-                input[13] = file(params.pipelines_testdata_base_path + 'reference/hisat2.tar.gz', checkIfExists: true)
-                input[14] = null
-                input[15] = null
-                input[16] = gencode
-                input[17] = featurecounts_group_type
-                input[18] = aligner
-                input[19] = pseudo_aligner
-                input[20] = skip_gtf_filter
-                input[21] = skip_bbsplit
-                input[22] = skip_sortmerna
-                input[23] = skip_alignment
-                input[24] = skip_pseudo_alignment
-                input[25] = use_sentieon_star
-                """
+        cleanup {
+            if (System.getenv("NFT_PROFILE")?.contains("docker")) {
+                "docker system prune -a -f --volumes".execute()
             }
-        }
-
-        then {
-            assertAll(
-                { assert workflow.success},
-                { assert snapshot(
-                    workflow.out.chrom_sizes,
-                    workflow.out.fai,
-                    workflow.out.fasta,
-                    workflow.out.gene_bed,
-                    workflow.out.gtf,
-                    workflow.out.hisat2_index,
-                    workflow.out.kallisto_index,
-                    workflow.out.rsem_index,
-                    workflow.out.salmon_index,
-                    workflow.out.sortmerna_index,
-                    workflow.out.splicesites,
-                    workflow.out.star_index,
-                    workflow.out.transcript_fasta,
-                    workflow.out.versions
-                ).match() }
-            )
+            new File("${launchDir}").deleteDir()
         }
     }
 }
