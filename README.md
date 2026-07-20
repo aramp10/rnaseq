@@ -240,3 +240,7 @@ Note:
   * **Workaround:** Fix the typo — `executor = 'sge'` — in the `process {}` block
   * **Reproduced:** 2026-07-13 — see Reproduction section in the detailed log below
   * **Detailed log:** [nextflow_local_mode_executor_typo_troubleshooting.md](https://github.com/aramp10/rnaseq/blob/master/troubleshooting/nextflow_local_mode_executor_typo_troubleshooting.md)
+* **Ticket [INC20925379](https://bu.service-now.com/now/nav/ui/classic/params/target/incident.do)** — Bowtie2 alignment killed by SGE reaper for exceeding allocated cores (`-profile prokaryotic`)
+  * **Issue:** `ALIGN_BOWTIE2:BOWTIE2_ALIGN` defaults to `process_high` (12 cpus), exactly matching the client's `omp12` allocation; normal `samtools sort` pipe overhead pushed actual usage to 13.4 cores, triggering an SGE reaper kill
+  * **Workaround:** Override `cpus` for `'.*:ALIGN_BOWTIE2:BOWTIE2_ALIGN'` via a custom `-c` config, and request a matching SGE core allocation (e.g. `-pe omp 16`)
+  * **Detailed log:** [nextflow_bowtie2_cpu_allocation_troubleshooting.md](https://github.com/aramp10/rnaseq/blob/master/troubleshooting/nextflow_bowtie2_cpu_allocation_troubleshooting.md)
