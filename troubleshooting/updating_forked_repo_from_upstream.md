@@ -119,3 +119,41 @@ downside on a personal fork — it's the safer default here.
 git status                                   # clean tree, "up to date with origin/master" when done
 git log --oneline -1 && git log --oneline -1 origin/master   # local and remote HEAD should match
 ```
+
+## Next Step: Isolate BU-SCC Content from Upstream-Tracked Files
+
+This sync went smoothly (one trivial `.gitignore` conflict), but that was partly luck —
+`nextflow.config` and `README.md` both auto-merged cleanly this time, even though both are files
+upstream actively edits too and both currently carry BU-specific content injected directly into
+them:
+
+- The SGE `process {}` block lives inline at the top of `nextflow.config`.
+- The "BU SCC Instructions" and "Troubleshooting" sections live inline inside `README.md`.
+
+Every future sync re-risks a real conflict in these two files, and each conflict has to be resolved
+by hand, re-verifying the custom content survived. `troubleshooting/*.md` never has this problem,
+because it's a directory name upstream doesn't have — there's nothing for it to collide with.
+
+**Goal:** apply that same isolation to the SGE config and the BU-specific docs, so a future
+`git merge upstream/master` only ever touches upstream's own files, never anything BU-specific.
+
+Rough approach for next time:
+
+1. **Move the SGE config out of `nextflow.config` into its own file**, e.g. `bu-scc/scc.config`,
+   containing just the existing `process { executor = 'sge'; penv = 'omp'; ... }` block. Load it at
+   run time with `-c bu-scc/scc.config` instead of relying on it being baked into `nextflow.config`
+   directly — the same `-c`-based pattern already established as the correct way to apply custom
+   process config (see the Bowtie2 CPU allocation troubleshooting log). `nextflow.config` itself goes
+   back to being pure upstream content, so it should never conflict again.
+2. **Move the "BU SCC Instructions" and "Troubleshooting" sections out of `README.md`** into
+   `bu-scc/README.md` (or similar), leaving at most a one-line pointer in the main `README.md` (or
+   nothing at all, if a short note in the repo description/wiki is enough). This removes the other
+   recurring conflict surface.
+3. **Consider consolidating** `troubleshooting/` under `bu-scc/troubleshooting/` at the same time, so
+   all BU-specific material lives under one clearly-named top-level directory upstream will never
+   introduce a same-named file/folder for.
+4. Update the BU SCC Instructions themselves (wherever they end up) to reflect the new `-c
+   bu-scc/scc.config` invocation instead of "edit nextflow.config directly."
+
+This is a restructuring task for its own session, not something to do as part of a routine sync —
+noting it here so it's not lost.
