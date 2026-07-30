@@ -244,3 +244,7 @@ Note:
   * **Issue:** `ALIGN_BOWTIE2:BOWTIE2_ALIGN` defaults to `process_high` (12 cpus), exactly matching the client's `omp12` allocation; normal `samtools sort` pipe overhead pushed actual usage to 13.4 cores, triggering an SGE reaper kill
   * **Workaround:** Override `cpus` for `'.*:ALIGN_BOWTIE2:BOWTIE2_ALIGN'` via a custom `-c` config, and request a matching SGE core allocation (e.g. `-pe omp 16`)
   * **Detailed log:** [nextflow_bowtie2_cpu_allocation_troubleshooting.md](https://github.com/aramp10/rnaseq/blob/master/troubleshooting/nextflow_bowtie2_cpu_allocation_troubleshooting.md)
+* **Ticket [INC20925379](https://bu.service-now.com/now/nav/ui/classic/params/target/incident.do)** — Client asked whether nf-core/rnaseq does batch correction, after spotting an outlier replicate on a PCA plot
+  * **Issue:** Not a bug — the pipeline itself does no batch correction anywhere (its built-in DESeq2 QC step is blind/intercept-only, diagnostic only); the client's own downstream DESeq2 script already includes `replicate` in the design formula, which fixes the actual DE results but not the PCA visualization
+  * **Workaround:** Use `limma::removeBatchEffect()` on the `vst`-transformed matrix for visualization only (never fed back into `DESeq()`), per DESeq2's own FAQ
+  * **Detailed log:** [deseq2_batch_correction_faq.md](https://github.com/aramp10/rnaseq/blob/master/troubleshooting/deseq2_batch_correction_faq.md)
