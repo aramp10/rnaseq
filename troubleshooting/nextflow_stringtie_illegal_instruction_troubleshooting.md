@@ -93,6 +93,11 @@ process {
 **Note:** `clusterOptions` inside `withName` *replaces* the general `clusterOptions`; it doesn't add
 to it. Keep `-P <your_project>` on both lines.
 
+The full file is saved in this folder as [scc_sge.config](scc_sge.config). Now that the fork's own
+`nextflow.config` includes these SGE settings and the StringTie fix, you don't need
+`-c scc_sge.config` when running the fork. It's still useful with a fresh clone of nf-core/rnaseq,
+which is how the tutorial test was run.
+
 ## Verification
 
 ```bash
