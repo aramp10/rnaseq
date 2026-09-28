@@ -8,8 +8,8 @@
 - **Ticket:** None. Found while testing commands in preparation for the Intro to Nextflow on the SCC
   tutorial.
 - **Pipeline:** nf-core/rnaseq v3.27.0 (StringTie 3.0.3 container), a fresh clone of upstream
-  nf-core/rnaseq. This fork is still at v3.26.0 (StringTie 2.2.3), which was not tested. Expect the issue
-  once the fork is synced to v3.27.0 or later.
+  nf-core/rnaseq. This fork has since been synced to v3.27.0, and the fix below is included in the
+  fork's `nextflow.config`.
 - **Nextflow:** 26.04.6 (`module load nextflow/26.04.6`)
 - **Cluster:** BU Shared Computing Cluster (SCC)
 - **Scheduler:** SGE
