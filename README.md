@@ -251,3 +251,7 @@ Note:
   * **Issue:** Not a bug — the pipeline itself does no batch correction anywhere (its built-in DESeq2 QC step is blind/intercept-only, diagnostic only); the client's own downstream DESeq2 script already includes `replicate` in the design formula, which fixes the actual DE results but not the PCA visualization
   * **Workaround:** Use `limma::removeBatchEffect()` on the `vst`-transformed matrix for visualization only (never fed back into `DESeq()`), per DESeq2's own FAQ
   * **Detailed log:** [deseq2_batch_correction_faq.md](https://github.com/aramp10/rnaseq/blob/master/troubleshooting/deseq2_batch_correction_faq.md)
+* **StringTie fails with "Illegal instruction" on older SCC nodes** (no ticket — found while testing commands for the Intro to Nextflow on the SCC tutorial, v3.27.0)
+  * **Issue:** `STRINGTIE_STRINGTIE` exits with code 132 (`SIGILL`) whenever SGE places it on an Ivy Bridge node; the StringTie 3.0.3 binary uses CPU instructions those nodes lack. Nextflow's retries usually land on newer nodes, so the run can still report success with `Failed: N`
+  * **Workaround:** Add `withName: 'STRINGTIE_STRINGTIE' { clusterOptions = '-P <your_project> -l cpu_arch=!ivybridge' }` to the `process {}` block of a custom `-c` config
+  * **Detailed log:** [nextflow_stringtie_illegal_instruction_troubleshooting.md](https://github.com/aramp10/rnaseq/blob/master/troubleshooting/nextflow_stringtie_illegal_instruction_troubleshooting.md)
