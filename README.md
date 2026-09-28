@@ -175,6 +175,9 @@ cd /projectnb/davey-lab/enafzig
 # Clone the GitHub repo
 git clone https://github.com/nf-core/rnaseq.git
 
+# Navigate into the folder
+cd rnaseq/
+
 # Load the Nextflow module
 module load nextflow/25.04.7
 
