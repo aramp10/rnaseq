@@ -112,8 +112,9 @@ echo true | qsub -w v -P ar-rcs -l cpu_arch=!ivybridge -pe omp 4
 nextflow run main.nf -profile test,singularity --outdir rnaseq_out_test -config scc_sge.config -preview
 ```
 
-All three checks passed. A `-preview` run doesn't submit jobs, so the final confirmation is a real
-run (`-resume` reuses completed steps) showing no `FAILED` lines for StringTie in the trace file.
+All three checks passed. **Confirmed 2026-10-01:** the failed StringTie task (job 7770279, exit 132
+on `scc-pi1`, Ivy Bridge) was resubmitted with `qsub -l cpu_arch=!ivybridge .command.run`. It ran
+on `scc-va4` (Broadwell) and exited 0, producing the transcript and abundance files.
 
 ## Related Notes
 
